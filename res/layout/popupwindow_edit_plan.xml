@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical"
+    android:paddingBottom="7dp" >
+
+    <TextView
+        android:id="@+id/deletePlan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:text="退出计划"
+        android:textColor="#ff0000"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/diver2" />
+
+    <TextView
+        android:id="@+id/editPlan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:text="编辑计划名称"
+        android:textColor="#016dbe"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/cancle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:text="取消"
+        android:textStyle="bold"
+        android:textColor="#016dbe"
+        android:textSize="16sp" />
+
+</LinearLayout>

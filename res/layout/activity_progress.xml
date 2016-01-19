@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.weijie.firerunning"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.weijie.firerunning.view.TextRoundCornerProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_margin="10dp"
+        app:rcBackgroundColor="#bbbbbb"
+        app:rcMax="100"
+        app:rcProgress="30"
+        app:rcProgressColor="#016dbe"
+        app:rcRadius="20dp"
+        app:rcTextProgress="呵呵"
+        app:rcTextProgressColor="#ffffff"
+        app:rcTextProgressMargin="10dp"
+        app:rcTextProgressSize="12sp" />
+
+</LinearLayout>

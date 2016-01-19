@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:running="http://schemas.android.com/apk/res/com.weijie.firerunning"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e8e9eA"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:background="@color/title_bg"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/byPhone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="手机注册"
+                android:textColor="@color/selector_blue_black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/byEmail"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="邮箱注册"
+                android:textColor="@color/selector_blue_black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/lineGuide"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="#66CCFF" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top" >
+
+        <LinearLayout
+            android:id="@+id/phoneIndex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+
+            <com.weijie.firerunning.view.InputView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                running:input_hint="昵称(3-10位的中英文、数字和下划线)"
+                running:input_left="@drawable/login_user"
+                running:input_type="none"
+                android:background="@color/title_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </com.weijie.firerunning.view.InputView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+
+            <com.weijie.firerunning.view.InputView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                running:input_hint="手机号码"
+                running:input_left="@drawable/register_phone"
+                running:input_type="none"
+                android:background="@color/title_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </com.weijie.firerunning.view.InputView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+
+            <com.weijie.firerunning.view.InputView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                running:input_hint="验证码"
+                running:input_left="@drawable/validate_code"
+                running:input_type="none"
+                android:background="@color/title_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </com.weijie.firerunning.view.InputView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+
+            <com.weijie.firerunning.view.InputView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                running:input_hint="请输入密码"
+                running:input_left="@drawable/login_key"
+                running:input_right="@drawable/login_key_invisiable"
+                running:input_type="numberPassword"
+                android:background="@color/title_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </com.weijie.firerunning.view.InputView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/emailIndex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:alpha="0"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+
+            <com.weijie.firerunning.view.InputView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                running:input_hint="昵称(3-10位的中英文、数字和下划线)"
+                running:input_left="@drawable/login_user"
+                running:input_type="none"
+                android:background="@color/title_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </com.weijie.firerunning.view.InputView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+
+            <com.weijie.firerunning.view.InputView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                running:input_hint="邮箱地址"
+                running:input_left="@drawable/register_email"
+                running:input_type="none"
+                android:background="@color/title_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </com.weijie.firerunning.view.InputView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+
+            <com.weijie.firerunning.view.InputView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                running:input_hint="请输入密码"
+                running:input_left="@drawable/login_key"
+                running:input_right="@drawable/login_key_invisiable"
+                running:input_type="numberPassword"
+                android:background="@color/title_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </com.weijie.firerunning.view.InputView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dddddd" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/comment"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/blue_button_bg"
+        android:minHeight="0dp"
+        android:text="注册"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+
+</RelativeLayout>
