@@ -76,4 +76,12 @@ public class InputView extends LinearLayout {
 		
 	}
 	
+	public String getText() {
+		return edit.getText().toString();
+	}
+	
+	public void setError(String error) {
+		edit.setError(error);
+	}
+	
 }
