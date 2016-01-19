@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:running="http://schemas.android.com/apk/res/com.weijie.firerunning"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <FrameLayout
+        android:id="@+id/runContent"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" >
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/map_schedule"
+        style="@style/text1"
+        android:layout_alignBottom="@id/runContent"
+        android:background="@drawable/selector_titlebar_button"
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="地图"
+        android:textSize="16sp" />
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/runContent"
+        android:background="#ececec"
+        android:divider="@drawable/run_record_divider"
+        android:dividerHeight="10dp"
+        android:listSelector="#00000000" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/start"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/runContent"
+        android:layout_marginTop="-30dp"
+        android:background="@drawable/add_schedule_fab_unchecked_default"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="开始"
+        android:textColor="#ffffff"
+        android:textSize="16sp" />
+
+    <!-- <TextView
+        android:id="@+id/location"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/runContent"
+        android:layout_marginTop="-30dp"
+        android:layout_toLeftOf="@id/start"
+        android:background="@drawable/add_schedule_fab_unchecked_default"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="定位"
+        android:textColor="#ffffff"
+        android:textSize="16sp" /> -->
+
+</RelativeLayout>

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:running="http://schemas.android.com/apk/res/com.weijie.firerunning"
+    android:id="@+id/schedule"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/msg"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:background="@drawable/titlebar_background"
+        android:orientation="vertical" >
+        
+        <TextView 
+            android:id="@+id/runCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            />
+        <LinearLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+            <TextView 
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                />
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:textSize="14sp"
+                android:textColor="#ffffff"
+                android:text="公里"
+                />
+        </LinearLayout>
+        <TextView 
+            android:id="@+id/averate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            />
+        <TextView 
+            android:id="@+id/mostDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            />
+        
+    </LinearLayout>
+
+    <com.weijie.firerunning.view.CircleImageView
+        android:id="@+id/head"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/msg"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/avatar_blue"
+        running:border_color="#ffffff"
+        running:border_width="1dp" />
+
+</RelativeLayout>

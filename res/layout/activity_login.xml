@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:running="http://schemas.android.com/apk/res/com.weijie.firerunning"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e8e9eA"
+    android:orientation="vertical" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/divider" />
+
+    <com.weijie.firerunning.view.InputView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        running:input_left="@drawable/login_user"
+       	running:input_type = "none"
+       	running:input_hint="昵称、手机、邮箱地址"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+    </com.weijie.firerunning.view.InputView>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider" />
+    
+    <com.weijie.firerunning.view.InputView
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        running:input_left="@drawable/login_key"
+        running:input_right="@drawable/login_key_invisiable"
+       	running:input_type = "numberPassword"
+       	running:input_hint="请输入密码"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+    </com.weijie.firerunning.view.InputView>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider" />
+    
+	<Button 
+	    android:id="@+id/login"
+	    android:layout_width="match_parent"
+	    android:layout_height="45dp"
+	    android:minHeight="0dp"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="10dp"
+	    android:layout_marginTop="30dp"
+	    android:background="@drawable/blue_button_bg"
+	    android:textSize="18sp"
+	    android:textColor="#ffffff"
+	    android:text="登录"
+	    />
+	
+	<TextView 
+	    android:id="@+id/regist"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:clickable="true"
+	    android:layout_marginTop="15dp"
+	    android:textSize="16sp"
+	    android:layout_marginLeft="10dp"
+	    android:text="注册"
+	    android:textColor="#66CCFF"/>
+    
+</LinearLayout>
