@@ -7,10 +7,12 @@ import android.animation.Keyframe;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -21,6 +23,7 @@ import com.weijie.firerunning.R;
 
 public class RegistActivity extends Activity implements OnClickListener {
 
+	private ActionBar actionBar;
 	private View byPhone,byEmail,lineGuide,phoneIndex,emailIndex,register;
 
 	private RelativeLayout content;
@@ -30,6 +33,16 @@ public class RegistActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_regist);
+		
+		actionBar = getActionBar();
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setDisplayUseLogoEnabled(true);
+		actionBar.setLogo(R.drawable.logo);
+		actionBar.setTitle("用户注册");
+		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.titlebar_background));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		content = (RelativeLayout) findViewById(R.id.content);
 		resetTransition();    
 
@@ -198,6 +211,15 @@ public class RegistActivity extends Activity implements OnClickListener {
 		}
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case android.R.id.home:
+			finish();
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
 	private float dp2px(int dp) {
 		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,

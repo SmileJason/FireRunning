@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import cn.bmob.v3.BmobQuery;
@@ -65,6 +66,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 		case R.id.regist:
 			startActivity(new Intent(this,RegistActivity.class));
 			break;
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case android.R.id.home:
+			finish();
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
