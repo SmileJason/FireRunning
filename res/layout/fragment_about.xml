@@ -5,17 +5,19 @@
     android:background="#e8e9eA"
     android:orientation="vertical" >
 
-    <RoundAngleImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+    <com.weijie.firerunning.view.RoundAngleImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:src="@drawable/ic_launcher" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher"
+         />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:background="@color/divider" />
 
     <RelativeLayout
@@ -107,7 +109,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="简介："
             />
         

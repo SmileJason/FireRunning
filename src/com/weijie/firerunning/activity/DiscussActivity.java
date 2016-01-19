@@ -46,7 +46,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
 import com.bmob.BmobProFile;
-import com.bmob.btp.callback.UploadListener;
+import com.bmob.btp.callback.UploadBatchListener;
 import com.weijie.firerunning.Conf;
 import com.weijie.firerunning.R;
 import com.weijie.firerunning.UserManager;
@@ -68,7 +68,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 	private ActionBar actionBar;
 	private LayoutInflater inflater;
 	private int width,height;
-	private LinearLayout lineLayout1,lineLayout2;
+	private LinearLayout lineLayout;
 	private AlertDialog dialog;
 	private List<String> paths;
 	private List<RoundAngleImageView> imgs;
@@ -101,8 +101,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		inflater = LayoutInflater.from(this);
 
 		content = (EditText) findViewById(R.id.content);
-		lineLayout1 = (LinearLayout) findViewById(R.id.layout1);
-		lineLayout2 = (LinearLayout) findViewById(R.id.layout2);
+		lineLayout = (LinearLayout) findViewById(R.id.layout);
 
 		findViewById(R.id.picture).setOnClickListener(this);
 		findViewById(R.id.location).setOnClickListener(this);
@@ -128,8 +127,8 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 				pDialog.setCanceledOnTouchOutside(false);  
 				pDialog.setMax(files.length);
 				pDialog.show();
-				
-				BmobProFile.getInstance(DiscussActivity.this).upload(files[0], new UploadListener() {
+
+				/*BmobProFile.getInstance(DiscussActivity.this).upload(files[0], new UploadListener() {
 
 		            @Override
 		            public void onSuccess(String fileName,String url,BmobFile file) {
@@ -150,9 +149,9 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		            public void onError(int statuscode, String errormsg) {
 		            	pDialog.dismiss();
 		            }
-		        });
-				
-				/*BmobProFile.getInstance(DiscussActivity.this).uploadBatch(files, new UploadBatchListener() {
+		        });*/
+
+				BmobProFile.getInstance(DiscussActivity.this).uploadBatch(files, new UploadBatchListener() {
 					@Override
 					public void onSuccess(boolean isFinish,String[] fileNames,String[] urls,BmobFile[] files) {
 						if(isFinish){
@@ -183,9 +182,6 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 						} else {
 							saveDiscuss(content.getText().toString().trim(),sbURL.toString(),sbName.toString());
 						}
-						//Discuss discuss = new Discuss(content.getText().toString().trim(), fileURL);
-						//showToast(""+Arrays.asList(fileNames)+""+Arrays.asList(files));
-						//showLog("NewBmobFileActivity -onSuccess :"+isFinish+"-----"+Arrays.asList(fileNames)+"----"+Arrays.asList(urls)+"----"+Arrays.asList(files));
 					}
 
 					@Override
@@ -200,7 +196,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 						pDialog.dismiss();
 						//showToast("批量上传出错："+errormsg);
 					}
-				});*/
+				});
 			} else {
 				saveDiscuss(content.getText().toString().trim(),null,null);
 			}
@@ -210,7 +206,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 	}
 
 	private Discuss discuss;
-	
+
 	private void saveDiscuss(String content,String fileURL,String fileName) {
 		discuss = new Discuss(content, fileURL, fileName);
 		if(user!=null) {
@@ -228,7 +224,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		if(address!=null && !address.equals("")) {
 			discuss.location = address;
 		}
-		
+
 		discuss.save(DiscussActivity.this,new SaveListener() {
 			@Override
 			public void onSuccess() {
@@ -266,18 +262,16 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.picture:
-			/*if(lineLayout2.getChildCount()<5) {
+			if(lineLayout.getChildCount()<5) {
 				shawDialog();
 			} else {
-				//ViewUtil.getInstance().showToast("最多上传10张图片");
-				ViewUtil.getInstance().showToast("现版本只支持单个文件上传");
-				//Toast.makeText(this, "最多上传10张图片", Toast.LENGTH_SHORT).show();
-			}*/
-			if(lineLayout1.getChildCount()<1) {
-				shawDialog();
-			} else {
-				ViewUtil.getInstance().showToast("现版本只支持单个文件上传");
+				ViewUtil.getInstance().showToast("最多上传5张图片");
 			}
+			/*if(lineLayout.getChildCount()<1) {
+				shawDialog();
+			} else {
+				ViewUtil.getInstance().showToast("现版本只支持单个文件上传");
+			}*/
 			break;
 		case R.id.location:
 			getLocation();
@@ -292,7 +286,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 	private String address;
 	private double latitude;
 	private double longitude;
-	
+
 	private void getLocation() {
 		//初始化定位
 		AMapLocationClient mLocationClient = new AMapLocationClient(getApplicationContext());
@@ -300,34 +294,34 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		mLocationClient.setLocationListener(new AMapLocationListener() {
 			@Override
 			public void onLocationChanged(AMapLocation amapLocation) {
-			    if (amapLocation != null) {
-			        if (amapLocation.getErrorCode() == 0) {
-			        //定位成功回调信息，设置相关消息
-			        amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-			        latitude = amapLocation.getLatitude();//获取纬度
-			        longitude = amapLocation.getLongitude();//获取经度
-			        amapLocation.getAccuracy();//获取精度信息
-			        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			        Date date = new Date(amapLocation.getTime());
-			        df.format(date);//定位时间
-			        address = amapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果
-			        amapLocation.getCountry();//国家信息
-			        amapLocation.getProvince();//省信息
-			        city = amapLocation.getCity();//城市信息
-			        amapLocation.getDistrict();//城区信息
-			        amapLocation.getRoad();//街道信息
-			        amapLocation.getCityCode();//城市编码
-			        amapLocation.getAdCode();//地区编码
-			    } else {
-			              //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-			        Log.e("AmapError","location Error, ErrCode:"
-			            + amapLocation.getErrorCode() + ", errInfo:"
-			            + amapLocation.getErrorInfo());
-			        }
-			    }
+				if (amapLocation != null) {
+					if (amapLocation.getErrorCode() == 0) {
+						//定位成功回调信息，设置相关消息
+						amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+						latitude = amapLocation.getLatitude();//获取纬度
+						longitude = amapLocation.getLongitude();//获取经度
+						amapLocation.getAccuracy();//获取精度信息
+						SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						Date date = new Date(amapLocation.getTime());
+						df.format(date);//定位时间
+						address = amapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果
+						amapLocation.getCountry();//国家信息
+						amapLocation.getProvince();//省信息
+						city = amapLocation.getCity();//城市信息
+						amapLocation.getDistrict();//城区信息
+						amapLocation.getRoad();//街道信息
+						amapLocation.getCityCode();//城市编码
+						amapLocation.getAdCode();//地区编码
+					} else {
+						//显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+						Log.e("AmapError","location Error, ErrCode:"
+								+ amapLocation.getErrorCode() + ", errInfo:"
+								+ amapLocation.getErrorInfo());
+					}
+				}
 			}
 		});
-		
+
 		AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
 		//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
 		mLocationOption.setLocationMode(AMapLocationMode.Hight_Accuracy);
@@ -520,13 +514,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 			@Override
 			public void onClick(View v) {
 				View l = (View) v.getParent();
-				lineLayout1.removeView(l);
-				lineLayout2.removeView(l);
-				if(lineLayout2.getChildCount()>0 && lineLayout1.getChildCount()<5) {
-					View child = lineLayout2.getChildAt(0);
-					lineLayout2.removeView(child);
-					lineLayout1.addView(child);
-				}
+				lineLayout.removeView(l);
 				paths.remove(v.getTag().toString());
 				for(RoundAngleImageView img: imgs) {
 					if(img!=null && img.getTag().toString()!=null) {
@@ -538,23 +526,12 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 				}
 			}
 		});
-		if(lineLayout2.getChildCount()<5) {
-			if(lineLayout1.getChildCount()<5) {
-				if(lineLayout1.getChildCount()>=1) {
-					lineLayout1.addView(layout);
-				} else {
-					lineLayout1.addView(layout);
-				}
-			} else {
-				if(lineLayout2.getChildCount()>=1) {
-					lineLayout2.addView(layout);
-				} else {
-					lineLayout2.addView(layout);
-				}
-			}
+
+		if(lineLayout.getChildCount()<5) {
+			lineLayout.addView(layout);
 		} else {
 			//Toast.makeText(this, "最多上传10张图片", Toast.LENGTH_SHORT).show();
-			ViewUtil.getInstance().showToast("最多上传10张图片");
+			ViewUtil.getInstance().showToast("最多上传5张图片");
 		}
 	}
 

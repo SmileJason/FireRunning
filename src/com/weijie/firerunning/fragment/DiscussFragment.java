@@ -42,7 +42,8 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 	public final static int DISCUSS_REQUEST = 10002;
 	public final static int DISCUSS_RESULT = 10003;
 
-	private int index = 0;
+	//private int index = 1;
+	//private final int PAGESIZE = 5;
 	private List<Discuss> discusses;
 	private DiscussAdapter adapter;
 	private AsyncCustomEndpoints ace;
@@ -55,7 +56,7 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 	private final Runnable mRefreshDone = new Runnable() {
 		@Override
 		public void run() {
-			index = 0;
+			//index = 1;
 			getData(true,false);
 		}
 	};
@@ -129,9 +130,9 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 		
 		JSONObject params = new JSONObject();
 		try {
-			params.put("index", index);
+			params.put("index", 0);
 			if(dateTime!=null && dateTime.length>0) {
-				params.put("dateTime", dateTime[0]);
+				params.put("dateTime", "'"+dateTime[0]+"'");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -152,7 +153,7 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 							if(refresh) {
 								discusses.clear();
 							}
-							discusses.addAll(0, dis);
+							discusses.addAll(dis);
 							if(adapter==null) {
 								adapter = new DiscussAdapter(discusses, getActivity());
 								listView.setAdapter(adapter);
@@ -169,7 +170,7 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 					} else if(load) {
 						loadData.setText("点击加载更多数据");
 						loadProgress.setVisibility(View.GONE);
-						index++;
+						//index++;
 					}
 				}
 			}

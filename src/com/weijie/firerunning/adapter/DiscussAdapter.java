@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
@@ -21,12 +22,14 @@ import com.weijie.firerunning.R;
 import com.weijie.firerunning.bean.Discuss;
 import com.weijie.firerunning.bean.User;
 import com.weijie.firerunning.view.RoundAngleImageView2;
+import com.weijie.firerunning.view.SingleImageDialog;
 
 public class DiscussAdapter extends BaseAdapter {
 
 	private List<Discuss> discusses;
 	private Context context;
 	private LayoutInflater inflater;
+	private SingleImageDialog imgDialog;
 	
 	public DiscussAdapter(List<Discuss> discusses, Context context) {
 		this.discusses = discusses;
@@ -63,17 +66,13 @@ public class DiscussAdapter extends BaseAdapter {
 			holder.name = (TextView) view.findViewById(R.id.name);
 			holder.dateTime = (TextView) view.findViewById(R.id.dateTime);
 			holder.content = (TextView) view.findViewById(R.id.content);
-			holder.layout1 = (LinearLayout) view.findViewById(R.id.layout1);
+			holder.layout = (LinearLayout) view.findViewById(R.id.layout);
 			for(int i=0;i<5;i++) {
-				View image = inflater.inflate(R.layout.item_picture2, holder.layout1, false);
-				holder.layout1.addView(image);
+				View image = inflater.inflate(R.layout.item_picture2, holder.layout, false);
+				image.setClickable(true);
+				image.setOnClickListener(listener);
+				holder.layout.addView(image);
 			}
-			holder.layout2 = (LinearLayout) view.findViewById(R.id.layout2);
-			for(int i=0;i<5;i++) {
-				View image = inflater.inflate(R.layout.item_picture2, holder.layout2, false);
-				holder.layout2.addView(image);
-			}
-
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
@@ -91,19 +90,10 @@ public class DiscussAdapter extends BaseAdapter {
 		if(fileURL!=null && !fileURL.equals("")) {
 			String[] files = fileName.split(",");
 			String[] urls = fileURL.split(",");
-			if(urls.length>5) {
-				holder.layout1.setVisibility(View.VISIBLE);
+			if(urls.length>0) {
+				holder.layout.setVisibility(View.VISIBLE);
 				for(int i=0;i<5;i++) {
-					RoundAngleImageView2 img = (RoundAngleImageView2) holder.layout1.getChildAt(i).findViewById(R.id.img);
-					img.setVisibility(View.VISIBLE);
-					img.setImageDrawable(context.getResources().getDrawable(R.drawable.image_load_cache));
-					//String url = BmobProFile.getInstance(context).signURL(files[i], urls[i], "80d9fa19187ad1a676248865c82b27ba", 100, "e8d70dfe20a2e648");
-					String url = BmobProFile.getInstance(context).signURL(files[i], urls[i], "68c14de64572e77eb8039d5781202301", 0, null);
-					showImageByNetworkImageView(img,url);
-				}
-				holder.layout2.setVisibility(View.VISIBLE);
-				for(int i=5;i<10;i++) {
-					RoundAngleImageView2 img = (RoundAngleImageView2) holder.layout2.getChildAt(i).findViewById(R.id.img);
+					RoundAngleImageView2 img = (RoundAngleImageView2) holder.layout.getChildAt(i).findViewById(R.id.img);
 					if(i<urls.length) {
 						img.setVisibility(View.VISIBLE);
 						img.setImageDrawable(context.getResources().getDrawable(R.drawable.image_load_cache));
@@ -114,26 +104,9 @@ public class DiscussAdapter extends BaseAdapter {
 						img.setVisibility(View.GONE);
 					}
 				}
-				
-			} else if(urls.length>0) {
-				holder.layout1.setVisibility(View.VISIBLE);
-				for(int i=0;i<5;i++) {
-					RoundAngleImageView2 img = (RoundAngleImageView2) holder.layout1.getChildAt(i).findViewById(R.id.img);
-					if(i<urls.length) {
-						img.setVisibility(View.VISIBLE);
-						img.setImageDrawable(context.getResources().getDrawable(R.drawable.image_load_cache));
-						//String url = BmobProFile.getInstance(context).signURL(files[i], urls[i], "80d9fa19187ad1a676248865c82b27ba", 100, "e8d70dfe20a2e648");
-						String url = BmobProFile.getInstance(context).signURL(files[i], urls[i], "68c14de64572e77eb8039d5781202301", 0, null);
-						showImageByNetworkImageView(img,url);
-					} else {
-						img.setVisibility(View.GONE);
-					}
-				}
-				holder.layout2.setVisibility(View.GONE);
 			}
 		} else {
-			holder.layout1.setVisibility(View.GONE);
-			holder.layout2.setVisibility(View.GONE);
+			holder.layout.setVisibility(View.GONE);
 		}
 		return view;
 	}
@@ -164,8 +137,19 @@ public class DiscussAdapter extends BaseAdapter {
 		TextView name;
 		TextView dateTime;
 		TextView content;
-		LinearLayout layout1;
-		LinearLayout layout2;
+		LinearLayout layout;
 	}
+	
+	private OnClickListener listener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			if(imgDialog==null) {
+				imgDialog = new SingleImageDialog(context); 
+			}
+			RoundAngleImageView2 img = (RoundAngleImageView2)(v.findViewById(R.id.img));
+			imgDialog.setData(img.getDrawable());
+			imgDialog.show();
+		}
+	};
 	
 }
