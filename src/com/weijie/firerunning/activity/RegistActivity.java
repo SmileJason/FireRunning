@@ -34,7 +34,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 
 	private RelativeLayout content;
 	private LayoutTransition mTransitioner;
-	private InputView username1,username2,password1,password2,phonenumber,email,verifiedCode;
+	private InputView username1,username2,password1,againpassword1,password2,againpassword2,phonenumber,email,verifiedCode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,8 @@ public class RegistActivity extends Activity implements OnClickListener {
 		username2 = (InputView) findViewById(R.id.username2);
 		password1 = (InputView) findViewById(R.id.password1);
 		password2 = (InputView) findViewById(R.id.password2);
+		againpassword1 = (InputView) findViewById(R.id.againpassword1);
+		againpassword2 = (InputView) findViewById(R.id.againpassword2);
 		email = (InputView) findViewById(R.id.email);
 		phonenumber = (InputView) findViewById(R.id.phonenumber);
 		verifiedCode = (InputView) findViewById(R.id.verifiedCode);
@@ -232,14 +234,20 @@ public class RegistActivity extends Activity implements OnClickListener {
 		if(username1.getText().toString().trim().equals("")) {
 			username1.setError("请输入用户昵称");
 			return;
+		} else if(password1.getText().toString().trim().equals("")) {
+			password1.setError("请输入密码");
+			return;
+		} else if(againpassword1.getText().toString().trim().equals("")) {
+			againpassword1.setError("请再次输入密码");
+			return;
+		} else if(!password1.getText().toString().trim().equals(againpassword1.getText().toString().trim())) {
+			againpassword1.setError("两次输入的密码不一致，请重新输入");
+			return;
 		} else if(phonenumber.getText().toString().trim().equals("")) {
 			phonenumber.setError("请输入手机号码");
 			return;
 		} else if(verifiedCode.getText().toString().trim().equals("")) {
 			verifiedCode.setError("请输入验证码");
-			return;
-		} else if(password1.getText().toString().trim().equals("")) {
-			password1.setError("请输入密码");
 			return;
 		}
 		User user = new User();
@@ -266,11 +274,17 @@ public class RegistActivity extends Activity implements OnClickListener {
 		if(username2.getText().toString().trim().equals("")) {
 			username2.setError("请输入用户昵称");
 			return;
-		} else if(email.getText().toString().trim().equals("")) {
-			email.setError("请输入邮箱");
-			return;
 		} else if(password2.getText().toString().trim().equals("")) {
 			password2.setError("请输入密码");
+			return;
+		} else if(againpassword2.getText().toString().trim().equals("")) {
+			againpassword2.setError("请再次输入密码");
+			return;
+		} else if(!password2.getText().toString().trim().equals(againpassword2.getText().toString().trim())) {
+			againpassword2.setError("两次输入的密码不一致，请重新输入");
+			return;
+		} else if(email.getText().toString().trim().equals("")) {
+			email.setError("请输入邮箱");
 			return;
 		}
 		User user = new User();

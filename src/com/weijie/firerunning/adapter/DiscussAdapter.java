@@ -83,7 +83,7 @@ public class DiscussAdapter extends BaseAdapter {
 		} else {
 			holder.name.setText(discuss.hide);
 		}
-		holder.dateTime.setText(discuss.dateTime);
+		holder.dateTime.setText(discuss.getCreatedAt());
 		holder.content.setText(discuss.content);
 		String fileURL = discuss.fileURL;
 		String fileName = discuss.fileName;

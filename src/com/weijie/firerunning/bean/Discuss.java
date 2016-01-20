@@ -17,8 +17,6 @@ public class Discuss extends BmobObject {
 	//在没有登录的情况下是随机字符串（时间或者手机号码）
 	public String hide;
 	
-	public String dateTime;
-	
 	public Discuss(String content, String fileURL, String fileName) {
 		this.content = content;
 		this.fileURL = fileURL;

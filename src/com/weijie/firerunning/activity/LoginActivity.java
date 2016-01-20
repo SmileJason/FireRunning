@@ -14,6 +14,7 @@ import cn.bmob.v3.listener.LogInListener;
 import com.weijie.firerunning.R;
 import com.weijie.firerunning.UserManager;
 import com.weijie.firerunning.bean.User;
+import com.weijie.firerunning.util.ViewUtil;
 import com.weijie.firerunning.view.InputView;
 
 public class LoginActivity extends Activity implements OnClickListener {
@@ -54,8 +55,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 		            @Override
 		            public void done(User user, BmobException e) {
 		                if(user!=null){
+		                	ViewUtil.getInstance().showToast("登录成功");
 		                	user = BmobUser.getCurrentUser(LoginActivity.this,User.class);
 		    		    	UserManager.getInstance().setUser(user);
+		    		    	finish();
 		                }
 		            }
 		        });

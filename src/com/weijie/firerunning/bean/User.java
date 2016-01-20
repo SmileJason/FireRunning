@@ -54,4 +54,12 @@ public class User extends BmobUser {
 	public void setIconURL(String iconURL) {
 		this.iconURL = iconURL;
 	}
+
+	@Override
+	public String toString() {
+		return "User [sex=" + sex + ", location=" + location + ", age=" + age
+				+ ", desc=" + desc + ", iconURL=" + iconURL
+				+ ", getUsername()=" + getUsername() + "]";
+	}
+	
 }

@@ -179,6 +179,8 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 	private void saveDiscuss(String content,String fileURL,String fileName) {
 		discuss = new Discuss(content, fileURL, fileName);
 		if(user!=null) {
+			//discuss.user = user;
+			//discuss.setValue("user", user);
 			discuss.user = user;
 		} else {
 			if(city!=null && !city.equals("")) {
@@ -197,7 +199,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		discuss.save(DiscussActivity.this,new SaveListener() {
 			@Override
 			public void onSuccess() {
-				discuss.dateTime = discuss.getCreatedAt();
+				//discuss.dateTime = discuss.getCreatedAt();
 				ViewUtil.getInstance().showToast("您的评论已经成功发送！");
 				finish();
 				/*discuss.update(DiscussActivity.this, new UpdateListener() {

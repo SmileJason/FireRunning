@@ -10,8 +10,8 @@ public class App extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		CrashHandler crashHandler = CrashHandler.getInstance();  
-		crashHandler.init(getApplicationContext());  
+		/*CrashHandler crashHandler = CrashHandler.getInstance();  
+		crashHandler.init(getApplicationContext());  */
 		DataBaseUtil.getInstance().setContext(this);
 		ViewUtil.getInstance().setContext(this);
 	}

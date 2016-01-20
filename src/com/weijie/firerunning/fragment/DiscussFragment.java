@@ -207,12 +207,20 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 		}
 		query.order("-createdAt");
 		query.setLimit(LIMIT);
+		query.include("user");
 		query.findObjects(this.getActivity(), new FindListener<Discuss>() {
 			@Override
 			public void onSuccess(List<Discuss> object) {
-				if(object==null && object.size()>0) {
+				if(object!=null && object.size()>0) {
 					if(refresh) {
-						discusses.addAll(0, object);
+						if(discusses.size()==0) {
+							discusses.addAll(0, object);
+						} else {
+							object.remove(object.size()-1);
+							if(object.size()>0) {
+								discusses.addAll(0, object);
+							}
+						}
 					} else {
 						discusses.addAll(object);
 					}
