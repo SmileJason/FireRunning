@@ -22,7 +22,6 @@ import cn.bmob.v3.listener.SaveListener;
 
 import com.weijie.firerunning.R;
 import com.weijie.firerunning.bean.User;
-import com.weijie.firerunning.util.ViewUtil;
 import com.weijie.firerunning.view.InputView;
 
 public class RegistActivity extends Activity implements OnClickListener {
@@ -220,7 +219,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 			if(byPhone.isSelected()) {
 				byPhoneRegist();
 			} else {
-				
+				byEmailRegist();
 			}
 			break;
 		}
@@ -245,20 +244,14 @@ public class RegistActivity extends Activity implements OnClickListener {
 		user.setPassword(password1.getText().toString().trim());
 		user.setMobilePhoneNumber(phonenumber.getText().toString().trim());
 		
-		
-		
-		user.signOrLogin(this, "验证码", new SaveListener() {
-
+		user.signOrLogin(this, verifiedCode.getText().toString().trim(), new SaveListener() {
 		    @Override
 		    public void onSuccess() {
-		        // TODO Auto-generated method stub
 		        //toast("注册或登录成功");
 		        //Log.i("smile", ""+user.getUsername()+"-"+user.getAge()+"-"+user.getObjectId());
 		    }
-
 		    @Override
 		    public void onFailure(int code, String msg) {
-		        // TODO Auto-generated method stub
 		        //toast("错误码："+code+",错误原因："+msg);
 		    }
 		});

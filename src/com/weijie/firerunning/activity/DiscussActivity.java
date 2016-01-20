@@ -3,7 +3,6 @@ package com.weijie.firerunning.activity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +37,6 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -76,7 +74,8 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 	private EditText content;
 
 	private User user;
-
+	private Discuss discuss;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -128,29 +127,6 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 				pDialog.setMax(files.length);
 				pDialog.show();
 
-				/*BmobProFile.getInstance(DiscussActivity.this).upload(files[0], new UploadListener() {
-
-		            @Override
-		            public void onSuccess(String fileName,String url,BmobFile file) {
-						pDialog.dismiss();
-						if(url==null || fileName==null || url.equals("") || fileName.equals("")) {
-							saveDiscuss(content.getText().toString().trim(),null,null);
-						} else {
-							saveDiscuss(content.getText().toString().trim(),url,fileName);
-						}
-		            }
-
-		            @Override
-		            public void onProgress(int progress) {
-		            	pDialog.setProgress(progress);
-		            }
-
-		            @Override
-		            public void onError(int statuscode, String errormsg) {
-		            	pDialog.dismiss();
-		            }
-		        });*/
-
 				BmobProFile.getInstance(DiscussActivity.this).uploadBatch(files, new UploadBatchListener() {
 					@Override
 					public void onSuccess(boolean isFinish,String[] fileNames,String[] urls,BmobFile[] files) {
@@ -183,18 +159,13 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 							saveDiscuss(content.getText().toString().trim(),sbURL.toString(),sbName.toString());
 						}
 					}
-
 					@Override
 					public void onProgress(int curIndex, int curPercent, int total,int totalPercent) {
 						pDialog.setProgress(curIndex);
-						//showLog("NewBmobFileActivity -onProgress :"+curIndex+"---"+curPercent+"---"+total+"----"+totalPercent);
 					}
-
 					@Override
 					public void onError(int statuscode, String errormsg) {
-						//showLog("NewBmobFileActivity -onError :"+statuscode+"--"+errormsg);
 						pDialog.dismiss();
-						//showToast("批量上传出错："+errormsg);
 					}
 				});
 			} else {
@@ -204,8 +175,6 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 			ViewUtil.getInstance().showToast("评论内容不能为空，请输入您的评论");
 		}
 	}
-
-	private Discuss discuss;
 
 	private void saveDiscuss(String content,String fileURL,String fileName) {
 		discuss = new Discuss(content, fileURL, fileName);
@@ -229,7 +198,9 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 			@Override
 			public void onSuccess() {
 				discuss.dateTime = discuss.getCreatedAt();
-				discuss.update(DiscussActivity.this, new UpdateListener() {
+				ViewUtil.getInstance().showToast("您的评论已经成功发送！");
+				finish();
+				/*discuss.update(DiscussActivity.this, new UpdateListener() {
 					@Override
 					public void onSuccess() {
 						ViewUtil.getInstance().showToast("您的评论已经成功发送！");
@@ -239,7 +210,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 					public void onFailure(int code, String msg) {
 						ViewUtil.getInstance().showToast("您的评论发送失败！",code);
 					}
-				});
+				});*/
 			}
 			@Override
 			public void onFailure(int code, String msg) {
@@ -267,11 +238,6 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 			} else {
 				ViewUtil.getInstance().showToast("最多上传5张图片");
 			}
-			/*if(lineLayout.getChildCount()<1) {
-				shawDialog();
-			} else {
-				ViewUtil.getInstance().showToast("现版本只支持单个文件上传");
-			}*/
 			break;
 		case R.id.location:
 			getLocation();
@@ -297,21 +263,22 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 				if (amapLocation != null) {
 					if (amapLocation.getErrorCode() == 0) {
 						//定位成功回调信息，设置相关消息
-						amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+						//amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
 						latitude = amapLocation.getLatitude();//获取纬度
 						longitude = amapLocation.getLongitude();//获取经度
-						amapLocation.getAccuracy();//获取精度信息
-						SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						Date date = new Date(amapLocation.getTime());
-						df.format(date);//定位时间
+						//amapLocation.getAccuracy();//获取精度信息
+						//SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						//Date date = new Date(amapLocation.getTime());
+						//df.format(date);//定位时间
 						address = amapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果
-						amapLocation.getCountry();//国家信息
-						amapLocation.getProvince();//省信息
+						//amapLocation.getCountry();//国家信息
+						//amapLocation.getProvince();//省信息
 						city = amapLocation.getCity();//城市信息
-						amapLocation.getDistrict();//城区信息
-						amapLocation.getRoad();//街道信息
-						amapLocation.getCityCode();//城市编码
-						amapLocation.getAdCode();//地区编码
+						//amapLocation.getDistrict();//城区信息
+						//amapLocation.getRoad();//街道信息
+						//amapLocation.getCityCode();//城市编码
+						//amapLocation.getAdCode();//地区编码
+						ViewUtil.getInstance().showToast("定位成功，当前的位置:"+address);
 					} else {
 						//显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
 						Log.e("AmapError","location Error, ErrCode:"
@@ -435,11 +402,8 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		case CODE_CAMERA_REQUEST:
 			if (hasSdcard()) {
 				String path = Environment.getExternalStorageDirectory()+"/"+imgName;
-				//Bitmap bm = getBitmap(path);
 				addPhotos(path);
 			} else {
-				/*Toast.makeText(getApplication(), "没有SDCard!", Toast.LENGTH_LONG)
-				.show();*/
 				ViewUtil.getInstance().showToast("没有SDCard!");
 			}
 			break;

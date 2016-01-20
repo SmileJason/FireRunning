@@ -1,10 +1,9 @@
 package com.weijie.firerunning.fragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,14 +21,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import cn.bmob.v3.AsyncCustomEndpoints;
-import cn.bmob.v3.listener.CloudCodeListener;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.listener.FindListener;
 
-import com.google.gson.reflect.TypeToken;
 import com.weijie.firerunning.R;
 import com.weijie.firerunning.adapter.DiscussAdapter;
 import com.weijie.firerunning.bean.Discuss;
-import com.weijie.firerunning.util.JSONUtil;
 import com.weijie.firerunning.util.ViewUtil;
 
 /**
@@ -41,18 +39,17 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 
 	public final static int DISCUSS_REQUEST = 10002;
 	public final static int DISCUSS_RESULT = 10003;
-
-	//private int index = 1;
-	//private final int PAGESIZE = 5;
+	//private TypeToken<ArrayList<Discuss>> typeToken = new TypeToken<ArrayList<Discuss>>() {};
+	private final int LIMIT = 5;
 	private List<Discuss> discusses;
 	private DiscussAdapter adapter;
-	private AsyncCustomEndpoints ace;
+	//private AsyncCustomEndpoints ace;
 	private Handler mHandler = new Handler();
 	private ListView listView;
 	private SwipeRefreshLayout mSwipeRefreshWidget;
 	private ProgressBar loadProgress;
 	private TextView loadData;
-	
+
 	private final Runnable mRefreshDone = new Runnable() {
 		@Override
 		public void run() {
@@ -68,9 +65,9 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 		mSwipeRefreshWidget = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_widget);
 		mSwipeRefreshWidget.setColorSchemeResources(R.color.color1, R.color.color2, R.color.color3,
 				R.color.color4);
-		
+
 		listView = (ListView) view.findViewById(R.id.listview);
-		
+
 		View footer = inflater.inflate(R.layout.view_footer, listView, false);
 		loadProgress = (ProgressBar) footer.findViewById(R.id.loadProgress);
 		loadData = (TextView) footer.findViewById(R.id.loadData);
@@ -80,13 +77,14 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 				if(discusses!=null && discusses.size()>0) {
 					loadData.setText("正在加载，请稍等");
 					loadProgress.setVisibility(View.VISIBLE);
-					Discuss discuss = discusses.get(discusses.size()-1);
-					getData(false,true,discuss.dateTime);
+					//Discuss discuss = discusses.get(discusses.size()-1);
+					//getData(false,true,discuss.dateTime);
+					getData(false,true);
 				}
 			}
 		});
 		listView.addFooterView(footer);
-		
+
 		listView.setOnItemClickListener(this);
 		discusses = new ArrayList<Discuss>();
 		mSwipeRefreshWidget.setOnRefreshListener(this);
@@ -106,7 +104,7 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 				}
 			});
 		}
-		
+
 		return view;
 	}
 
@@ -117,17 +115,17 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	private void refresh() {
 		mHandler.removeCallbacks(mRefreshDone);
-		mHandler.postDelayed(mRefreshDone, 1000);
+		mHandler.post(mRefreshDone);
 	}
 
 	private void getData(final boolean refresh,final boolean load,String...dateTime){
-		if(ace==null) {
+		/*if(ace==null) {
 			ace = new AsyncCustomEndpoints();
 		}
-		
+
 		JSONObject params = new JSONObject();
 		try {
 			params.put("index", 0);
@@ -137,7 +135,7 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		ace.callEndpoint(this.getActivity(), "getDiscusses", params, 
 				new CloudCodeListener() {
 			@Override
@@ -145,7 +143,6 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 				//toast("云端usertest方法返回:" + object.toString());
 				//ViewUtil.getInstance().showToast(object.toString());
 				if(object!=null) {
-					TypeToken<ArrayList<Discuss>> typeToken = new TypeToken<ArrayList<Discuss>>() {};
 					List<Discuss> dis;
 					try {
 						dis = JSONUtil.toList(new JSONObject(object.toString()), "results", typeToken);
@@ -164,18 +161,78 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-					
+
 					if(refresh) {
 						mSwipeRefreshWidget.setRefreshing(false);
 					} else if(load) {
 						loadData.setText("点击加载更多数据");
 						loadProgress.setVisibility(View.GONE);
-						//index++;
 					}
 				}
 			}
 			@Override
 			public void onFailure(int code, String msg) {
+				ViewUtil.getInstance().showToast(msg);
+				if(refresh) {
+					mSwipeRefreshWidget.setRefreshing(false);
+				} else if(load) {
+					loadData.setText("点击加载更多数据");
+					loadProgress.setVisibility(View.GONE);
+				}
+			}
+		});*/
+
+		BmobQuery<Discuss> query = new BmobQuery<Discuss>();
+		if(discusses!=null && discusses.size()>0) {
+			String sDate;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+			Date date  = null;
+			if(refresh) {
+				sDate = discusses.get(0).getCreatedAt();
+				try {
+					date = sdf.parse(sDate);
+					query.addWhereGreaterThan("createdAt",new BmobDate(date));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else if(load) {
+				sDate = discusses.get(discusses.size()-1).getCreatedAt();
+				try {
+					date = sdf.parse(sDate);
+					query.addWhereLessThan("createdAt",new BmobDate(date));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		query.order("-createdAt");
+		query.setLimit(LIMIT);
+		query.findObjects(this.getActivity(), new FindListener<Discuss>() {
+			@Override
+			public void onSuccess(List<Discuss> object) {
+				if(object==null && object.size()>0) {
+					if(refresh) {
+						discusses.addAll(0, object);
+					} else {
+						discusses.addAll(object);
+					}
+					if(adapter==null) {
+						adapter = new DiscussAdapter(discusses, getActivity());
+						listView.setAdapter(adapter);
+					} else {
+						adapter.notifyDataSetChanged();
+					}
+				}
+
+				if(refresh) {
+					mSwipeRefreshWidget.setRefreshing(false);
+				} else if(load) {
+					loadData.setText("点击加载更多数据");
+					loadProgress.setVisibility(View.GONE);
+				}
+			}
+			@Override
+			public void onError(int code, String msg) {
 				ViewUtil.getInstance().showToast(msg);
 				if(refresh) {
 					mSwipeRefreshWidget.setRefreshing(false);
@@ -195,7 +252,7 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-		
+
 	}
 
 }
