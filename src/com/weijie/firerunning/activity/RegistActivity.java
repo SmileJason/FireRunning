@@ -18,8 +18,12 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import cn.bmob.v3.listener.SaveListener;
 
 import com.weijie.firerunning.R;
+import com.weijie.firerunning.bean.User;
+import com.weijie.firerunning.util.ViewUtil;
+import com.weijie.firerunning.view.InputView;
 
 public class RegistActivity extends Activity implements OnClickListener {
 
@@ -28,6 +32,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 
 	private RelativeLayout content;
 	private LayoutTransition mTransitioner;
+	private InputView username1,username2,password1,password2,phonenumber,email,verifiedCode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,14 @@ public class RegistActivity extends Activity implements OnClickListener {
 		content = (RelativeLayout) findViewById(R.id.content);
 		resetTransition();    
 
+		username1 = (InputView) findViewById(R.id.username1);
+		username2 = (InputView) findViewById(R.id.username2);
+		password1 = (InputView) findViewById(R.id.password1);
+		password2 = (InputView) findViewById(R.id.password2);
+		email = (InputView) findViewById(R.id.email);
+		phonenumber = (InputView) findViewById(R.id.phonenumber);
+		verifiedCode = (InputView) findViewById(R.id.verifiedCode);
+		
 		register = findViewById(R.id.register);
 		byPhone = findViewById(R.id.byPhone);
 		byEmail = findViewById(R.id.byEmail);
@@ -54,6 +67,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 		emailIndex = findViewById(R.id.emailIndex);
 		byPhone.setOnClickListener(this);
 		byEmail.setOnClickListener(this);
+		register.setOnClickListener(this);
 		byPhone.setSelected(true);
 		WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 		int width = wm.getDefaultDisplay().getWidth();
@@ -199,18 +213,62 @@ public class RegistActivity extends Activity implements OnClickListener {
 				animSet.play(anim2).with(anim3);  
 				animSet.play(anim3).with(anim4); 
 				animSet.setDuration(300);  
-				
 				animSet.start();  
-
-
 			}
 			break;
-
-		default:
+		case R.id.register:
+			if(byPhone.isSelected()) {
+				byPhoneRegist();
+			} else {
+				
+			}
 			break;
 		}
 	}
 
+	private void byPhoneRegist() {
+		if(username1.getText().toString().trim().equals("")) {
+			username1.setError("请输入用户昵称");
+			return;
+		} else if(phonenumber.getText().toString().trim().equals("")) {
+			phonenumber.setError("请输入手机号码");
+			return;
+		} else if(verifiedCode.getText().toString().trim().equals("")) {
+			verifiedCode.setError("请输入验证码");
+			return;
+		} else if(password1.getText().toString().trim().equals("")) {
+			password1.setError("请输入密码");
+			return;
+		}
+		User user = new User();
+		user.setUsername(username1.getText().toString().trim());
+		user.setPassword(password1.getText().toString().trim());
+		user.setMobilePhoneNumber(phonenumber.getText().toString().trim());
+		
+		
+		
+		user.signOrLogin(this, "验证码", new SaveListener() {
+
+		    @Override
+		    public void onSuccess() {
+		        // TODO Auto-generated method stub
+		        //toast("注册或登录成功");
+		        //Log.i("smile", ""+user.getUsername()+"-"+user.getAge()+"-"+user.getObjectId());
+		    }
+
+		    @Override
+		    public void onFailure(int code, String msg) {
+		        // TODO Auto-generated method stub
+		        //toast("错误码："+code+",错误原因："+msg);
+		    }
+		});
+	}
+	
+	private void byEmailRegist() {
+		
+	}
+	
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {

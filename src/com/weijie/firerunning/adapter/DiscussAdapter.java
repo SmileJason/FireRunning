@@ -79,7 +79,7 @@ public class DiscussAdapter extends BaseAdapter {
 		}
 		User user = discuss.user;
 		if(user!=null) {
-			holder.name.setText(user.password);
+			holder.name.setText(user.getUsername());
 		} else {
 			holder.name.setText(discuss.hide);
 		}

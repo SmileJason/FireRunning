@@ -114,7 +114,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		if(user==null) {
 			username.setText("注册/登录");
 		} else {
-			username.setText(user.username);
+			username.setText(user.getUsername());
 		}
 		mDrawerList.addHeaderView(head);
 
