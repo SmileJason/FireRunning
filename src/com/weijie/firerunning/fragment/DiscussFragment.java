@@ -252,7 +252,7 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-
+		
 	}
 
 }

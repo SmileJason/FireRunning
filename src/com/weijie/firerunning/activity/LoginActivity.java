@@ -1,7 +1,5 @@
 package com.weijie.firerunning.activity;
 
-import java.util.List;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -9,10 +7,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.LogInListener;
 
 import com.weijie.firerunning.R;
+import com.weijie.firerunning.UserManager;
 import com.weijie.firerunning.bean.User;
 import com.weijie.firerunning.view.InputView;
 
@@ -50,17 +50,15 @@ public class LoginActivity extends Activity implements OnClickListener {
 			} else if(password.getText().equals("")) {
 				password.setError("密码不能为空");
 			} else {
-				BmobQuery<User> query = new BmobQuery<User>();
-				query.addWhereEqualTo("username", username.getText());
-				query.addWhereEqualTo("password", password.getText());
-				query.findObjects(this, new FindListener<User>() {
-					@Override
-					public void onSuccess(List<User> users) {
-					}
-					@Override
-					public void onError(int code, String msg) {
-					}
-				});
+				BmobUser.loginByAccount(this, username.getText(), password.getText(), new LogInListener<User>() {
+		            @Override
+		            public void done(User user, BmobException e) {
+		                if(user!=null){
+		                	user = BmobUser.getCurrentUser(LoginActivity.this,User.class);
+		    		    	UserManager.getInstance().setUser(user);
+		                }
+		            }
+		        });
 			}
 			break;
 		case R.id.regist:

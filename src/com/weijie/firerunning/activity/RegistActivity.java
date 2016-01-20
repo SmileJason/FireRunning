@@ -18,10 +18,13 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
 
 import com.weijie.firerunning.R;
+import com.weijie.firerunning.UserManager;
 import com.weijie.firerunning.bean.User;
+import com.weijie.firerunning.util.ViewUtil;
 import com.weijie.firerunning.view.InputView;
 
 public class RegistActivity extends Activity implements OnClickListener {
@@ -249,6 +252,8 @@ public class RegistActivity extends Activity implements OnClickListener {
 		    public void onSuccess() {
 		        //toast("注册或登录成功");
 		        //Log.i("smile", ""+user.getUsername()+"-"+user.getAge()+"-"+user.getObjectId());
+		    	User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
+		    	UserManager.getInstance().setUser(user);
 		    }
 		    @Override
 		    public void onFailure(int code, String msg) {
@@ -258,6 +263,33 @@ public class RegistActivity extends Activity implements OnClickListener {
 	}
 	
 	private void byEmailRegist() {
+		if(username2.getText().toString().trim().equals("")) {
+			username2.setError("请输入用户昵称");
+			return;
+		} else if(email.getText().toString().trim().equals("")) {
+			email.setError("请输入邮箱");
+			return;
+		} else if(password2.getText().toString().trim().equals("")) {
+			password2.setError("请输入密码");
+			return;
+		}
+		User user = new User();
+		user.setUsername(username2.getText().toString().trim());
+		user.setPassword(password2.getText().toString().trim());
+		user.setEmail(email.getText().toString().trim());
+		
+		user.signUp(this, new SaveListener() {
+		    @Override
+		    public void onSuccess() {
+		    	ViewUtil.getInstance().showToast("注册成功!");
+		    	User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
+		    	UserManager.getInstance().setUser(user);
+		    }
+		    @Override
+		    public void onFailure(int code, String msg) {
+		    	ViewUtil.getInstance().showToast("注册失败:"+msg);
+		    }
+		});
 		
 	}
 	
