@@ -130,34 +130,38 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 				BmobProFile.getInstance(DiscussActivity.this).uploadBatch(files, new UploadBatchListener() {
 					@Override
 					public void onSuccess(boolean isFinish,String[] fileNames,String[] urls,BmobFile[] files) {
-						if(isFinish){
-							pDialog.dismiss();
-						}
-						StringBuffer sbURL = null;
-						if(urls!=null && urls.length>0) {
-							sbURL = new StringBuffer();
-							for(int i=0;i<urls.length;i++) {
-								sbURL.append(urls[i]);
-								if(i<urls.length-1) {
-									sbURL.append(",");
+						try {
+							if(isFinish){
+								pDialog.dismiss();
+								StringBuffer sbURL = null;
+								if(urls!=null && urls.length>0) {
+									sbURL = new StringBuffer();
+									for(int i=0;i<urls.length;i++) {
+										sbURL.append(urls[i]);
+										if(i<urls.length-1) {
+											sbURL.append(",");
+										}
+									}
+								}
+								StringBuffer sbName = null;
+								if(fileNames!=null && fileNames.length>0) {
+									sbName = new StringBuffer();
+									for(int i=0;i<urls.length;i++) {
+										sbName.append(fileNames[i]);
+										if(i<urls.length-1) {
+											sbName.append(",");
+										}
+									}
+								}
+								if(sbURL==null || sbName==null) {
+									saveDiscuss(content.getText().toString().trim(),null,null);
+								} else {
+									saveDiscuss(content.getText().toString().trim(),sbURL.toString(),sbName.toString());
 								}
 							}
+						} catch (Exception e) {
 						}
-						StringBuffer sbName = null;
-						if(fileNames!=null && fileNames.length>0) {
-							sbName = new StringBuffer();
-							for(int i=0;i<urls.length;i++) {
-								sbName.append(fileNames[i]);
-								if(i<urls.length-1) {
-									sbName.append(",");
-								}
-							}
-						}
-						if(sbURL==null || sbName==null) {
-							saveDiscuss(content.getText().toString().trim(),null,null);
-						} else {
-							saveDiscuss(content.getText().toString().trim(),sbURL.toString(),sbName.toString());
-						}
+						
 					}
 					@Override
 					public void onProgress(int curIndex, int curPercent, int total,int totalPercent) {

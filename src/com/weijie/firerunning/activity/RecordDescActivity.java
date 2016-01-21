@@ -116,6 +116,9 @@ public class RecordDescActivity extends Activity {
 				long max = 0;
 				long min = 0;
 				for(String s:mss) {
+					if(s.equals("")) {
+						return;
+					}
 					long m = Long.parseLong(s);
 					if(m>max) {
 						max = m;

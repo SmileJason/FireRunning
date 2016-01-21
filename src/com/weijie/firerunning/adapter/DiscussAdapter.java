@@ -20,7 +20,7 @@ import com.weijie.firerunning.R;
 import com.weijie.firerunning.bean.Discuss;
 import com.weijie.firerunning.bean.User;
 import com.weijie.firerunning.net.BitmapImageCache;
-import com.weijie.firerunning.view.RoundAngleImageView2;
+import com.weijie.firerunning.view.RoundAngleImageView;
 import com.weijie.firerunning.view.SingleImageDialog;
 
 public class DiscussAdapter extends BaseAdapter {
@@ -70,6 +70,7 @@ public class DiscussAdapter extends BaseAdapter {
 			holder.content = (TextView) view.findViewById(R.id.content);
 			holder.layout = (LinearLayout) view.findViewById(R.id.layout);
 			for(int i=0;i<5;i++) {
+				//View image = inflater.inflate(R.layout.item_picture2, holder.layout, false);
 				View image = inflater.inflate(R.layout.item_picture2, holder.layout, false);
 				image.setClickable(true);
 				image.setOnClickListener(listener);
@@ -94,18 +95,27 @@ public class DiscussAdapter extends BaseAdapter {
 			String[] urls = fileURL.split(",");
 			if(urls.length>0) {
 				holder.layout.setVisibility(View.VISIBLE);
+				//String[] us = new String[urls.length];
 				for(int i=0;i<5;i++) {
-					RoundAngleImageView2 img = (RoundAngleImageView2) holder.layout.getChildAt(i).findViewById(R.id.img);
+					//RoundAngleImageView2 img = (RoundAngleImageView2) holder.layout.getChildAt(i).findViewById(R.id.img);
+					RoundAngleImageView img = (RoundAngleImageView) holder.layout.getChildAt(i).findViewById(R.id.img);
 					if(i<urls.length) {
 						img.setVisibility(View.VISIBLE);
-						img.setImageDrawable(context.getResources().getDrawable(R.drawable.image_load_cache));
+						//img.setImageDrawable(context.getResources().getDrawable(R.drawable.image_load_cache));
 						//String url = BmobProFile.getInstance(context).signURL(files[i], urls[i], "80d9fa19187ad1a676248865c82b27ba", 100, "e8d70dfe20a2e648");
 						String url = BmobProFile.getInstance(context).signURL(files[i], urls[i], "68c14de64572e77eb8039d5781202301", 0, null);
 						showImageByNetworkImageView(img,url);
+						//us[i] = url;
 					} else {
+						//RoundAngleImageView img = (RoundAngleImageView) holder.layout.getChildAt(i).findViewById(R.id.img);
 						img.setVisibility(View.GONE);
 					}
 				}
+				/*for(int i=0;i<us.length;i++) {
+					RoundAngleImageView img = (RoundAngleImageView) holder.layout.getChildAt(i).findViewById(R.id.img);
+					img.setVisibility(View.VISIBLE);
+					showImageByNetworkImageView(img,us[i]);
+				}*/
 			}
 		} else {
 			holder.layout.setVisibility(View.GONE);
@@ -116,7 +126,7 @@ public class DiscussAdapter extends BaseAdapter {
 	/**
      * 利用NetworkImageView显示网络图片
      */ 
-    private void showImageByNetworkImageView(RoundAngleImageView2 img,String imageUrl){ 
+    private void showImageByNetworkImageView(RoundAngleImageView img,String imageUrl){ 
         /*RequestQueue requestQueue = Volley.newRequestQueue(context); 
         final LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(20); 
         ImageCache imageCache = new ImageCache() { 
@@ -154,7 +164,7 @@ public class DiscussAdapter extends BaseAdapter {
 			if(imgDialog==null) {
 				imgDialog = new SingleImageDialog(context); 
 			}
-			RoundAngleImageView2 img = (RoundAngleImageView2)(v.findViewById(R.id.img));
+			RoundAngleImageView img = (RoundAngleImageView)(v.findViewById(R.id.img));
 			imgDialog.setData(img.getDrawable());
 			imgDialog.show();
 		}
