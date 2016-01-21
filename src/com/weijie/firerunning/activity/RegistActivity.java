@@ -325,6 +325,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 				ViewUtil.getInstance().showToast("注册成功!");
 				User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
 				UserManager.getInstance().setUser(user);
+				finish();
 			}
 			@Override
 			public void onFailure(int code, String msg) {

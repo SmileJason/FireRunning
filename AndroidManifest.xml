@@ -70,7 +70,7 @@
             android:name="com.weijie.firerunning.activity.RegistActivity"
             android:screenOrientation="nosensor" >
         </activity>
-
+        
         <service
             android:name="com.weijie.firerunning.gps.LBSService"
             android:process=":remote" >

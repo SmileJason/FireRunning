@@ -2,9 +2,8 @@ package com.weijie.firerunning.adapter;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,12 +14,12 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageLoader.ImageCache;
-import com.android.volley.toolbox.Volley;
 import com.bmob.BmobProFile;
+import com.weijie.firerunning.App;
 import com.weijie.firerunning.R;
 import com.weijie.firerunning.bean.Discuss;
 import com.weijie.firerunning.bean.User;
+import com.weijie.firerunning.net.BitmapImageCache;
 import com.weijie.firerunning.view.RoundAngleImageView2;
 import com.weijie.firerunning.view.SingleImageDialog;
 
@@ -30,11 +29,14 @@ public class DiscussAdapter extends BaseAdapter {
 	private Context context;
 	private LayoutInflater inflater;
 	private SingleImageDialog imgDialog;
+	private ImageLoader imageLoader;
 	
-	public DiscussAdapter(List<Discuss> discusses, Context context) {
+	public DiscussAdapter(List<Discuss> discusses, Activity context) {
 		this.discusses = discusses;
 		this.context = context;
 		this.inflater = LayoutInflater.from(context);
+		RequestQueue queue = App.getRequestQueue(context.getApplication());
+		imageLoader = new ImageLoader(queue, new BitmapImageCache(context));
 	}
 
 	@Override
@@ -115,7 +117,7 @@ public class DiscussAdapter extends BaseAdapter {
      * 利用NetworkImageView显示网络图片
      */ 
     private void showImageByNetworkImageView(RoundAngleImageView2 img,String imageUrl){ 
-        RequestQueue requestQueue = Volley.newRequestQueue(context); 
+        /*RequestQueue requestQueue = Volley.newRequestQueue(context); 
         final LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(20); 
         ImageCache imageCache = new ImageCache() { 
             @Override 
@@ -130,7 +132,13 @@ public class DiscussAdapter extends BaseAdapter {
         }; 
         ImageLoader imageLoader = new ImageLoader(requestQueue, imageCache); 
         img.setTag("url"); 
-        img.setImageUrl(imageUrl,imageLoader); 
+        img.setImageUrl(imageUrl,imageLoader); */
+    	
+    	imageLoader.get(imageUrl
+				,ImageLoader.getImageListener(img
+						,R.drawable.image_load_cache
+						, R.drawable.image_load_cache));
+    	
     } 
 	
 	class ViewHolder {
