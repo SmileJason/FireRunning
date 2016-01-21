@@ -18,7 +18,10 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.RequestSMSCodeListener;
 import cn.bmob.v3.listener.SaveListener;
 
 import com.weijie.firerunning.R;
@@ -40,7 +43,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_regist);
-		
+
 		actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(true);
@@ -49,7 +52,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 		actionBar.setTitle("用户注册");
 		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.titlebar_background));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+
 		content = (RelativeLayout) findViewById(R.id.content);
 		resetTransition();    
 
@@ -62,7 +65,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 		email = (InputView) findViewById(R.id.email);
 		phonenumber = (InputView) findViewById(R.id.phonenumber);
 		verifiedCode = (InputView) findViewById(R.id.verifiedCode);
-		
+
 		register = findViewById(R.id.register);
 		byPhone = findViewById(R.id.byPhone);
 		byEmail = findViewById(R.id.byEmail);
@@ -72,6 +75,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 		byPhone.setOnClickListener(this);
 		byEmail.setOnClickListener(this);
 		register.setOnClickListener(this);
+		findViewById(R.id.getVerifiedCode).setOnClickListener(this);
 		byPhone.setSelected(true);
 		WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 		int width = wm.getDefaultDisplay().getWidth();
@@ -171,17 +175,18 @@ public class RegistActivity extends Activity implements OnClickListener {
 		switch (view.getId()) {
 		case R.id.byPhone:
 			if(!byPhone.isSelected()) {
+				phoneIndex.setVisibility(View.VISIBLE);
 				byEmail.setSelected(false);
 				byPhone.setSelected(true);
-				
+
 				//phoneIndex.setVisibility(View.VISIBLE);
 				ObjectAnimator anim1 = ObjectAnimator.ofFloat(emailIndex, "alpha",  
 						1f, 0f);  
 				ObjectAnimator anim2 = ObjectAnimator.ofFloat(phoneIndex, "alpha",  
 						0f, 1f);  
 				ObjectAnimator anim3 = ObjectAnimator.ofFloat(lineGuide, "translationX", lineGuide.getTranslationX(), 0);
-				
-				ObjectAnimator anim4 = ObjectAnimator.ofFloat(register, "translationY", register.getTranslationY(), register.getTranslationY()+dp2px(45));
+
+				ObjectAnimator anim4 = ObjectAnimator.ofFloat(register, "translationY", register.getTranslationY(), register.getTranslationY());
 				/** 
 				 * anim1，anim2,anim3同时执行 
 				 * anim4接着执行 
@@ -191,13 +196,14 @@ public class RegistActivity extends Activity implements OnClickListener {
 				animSet.play(anim2).with(anim3);  
 				animSet.play(anim3).with(anim4); 
 				animSet.setDuration(300);  
-				
-				animSet.start();  
 
+				animSet.start();  
+				emailIndex.setVisibility(View.GONE);
 			}
 			break;
 		case R.id.byEmail:
 			if(!byEmail.isSelected()) {
+				emailIndex.setVisibility(View.VISIBLE);
 				byPhone.setSelected(false);
 				byEmail.setSelected(true);
 
@@ -207,7 +213,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 				ObjectAnimator anim2 = ObjectAnimator.ofFloat(emailIndex, "alpha",  
 						0f, 1f);  
 				ObjectAnimator anim3 = ObjectAnimator.ofFloat(lineGuide, "translationX", lineGuide.getTranslationX(), lineGuide.getWidth());
-				ObjectAnimator anim4 = ObjectAnimator.ofFloat(register, "translationY", register.getTranslationY(), register.getTranslationY()-dp2px(45));
+				ObjectAnimator anim4 = ObjectAnimator.ofFloat(register, "translationY", register.getTranslationY(), register.getTranslationY());
 				/** 
 				 * anim1，anim2,anim3同时执行 
 				 * anim4接着执行 
@@ -218,6 +224,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 				animSet.play(anim3).with(anim4); 
 				animSet.setDuration(300);  
 				animSet.start();  
+				phoneIndex.setVisibility(View.GONE);
 			}
 			break;
 		case R.id.register:
@@ -225,6 +232,24 @@ public class RegistActivity extends Activity implements OnClickListener {
 				byPhoneRegist();
 			} else {
 				byEmailRegist();
+			}
+			break;
+		case R.id.getVerifiedCode:
+			if(phonenumber.getText().toString().trim().equals("")) {
+				phonenumber.setError("请输入手机号码");
+				return;
+			} else {
+				BmobSMS.requestSMSCode(this, phonenumber.getText().toString().trim(),"FireCode", new RequestSMSCodeListener() {
+
+					@Override
+					public void done(Integer smsId, BmobException ex) {
+						if(ex==null){//验证码发送成功
+							ViewUtil.getInstance().showToast("短信id："+smsId);
+						} else {
+							ViewUtil.getInstance().showToast("验证码发送失败"+ex.getMessage());
+						}
+					}
+				});
 			}
 			break;
 		}
@@ -254,22 +279,24 @@ public class RegistActivity extends Activity implements OnClickListener {
 		user.setUsername(username1.getText().toString().trim());
 		user.setPassword(password1.getText().toString().trim());
 		user.setMobilePhoneNumber(phonenumber.getText().toString().trim());
-		
+
 		user.signOrLogin(this, verifiedCode.getText().toString().trim(), new SaveListener() {
-		    @Override
-		    public void onSuccess() {
-		        //toast("注册或登录成功");
-		        //Log.i("smile", ""+user.getUsername()+"-"+user.getAge()+"-"+user.getObjectId());
-		    	User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
-		    	UserManager.getInstance().setUser(user);
-		    }
-		    @Override
-		    public void onFailure(int code, String msg) {
-		        //toast("错误码："+code+",错误原因："+msg);
-		    }
+			@Override
+			public void onSuccess() {
+				//toast("注册或登录成功");
+				//Log.i("smile", ""+user.getUsername()+"-"+user.getAge()+"-"+user.getObjectId());
+				ViewUtil.getInstance().showToast("注册成功");
+				User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
+				UserManager.getInstance().setUser(user);
+			}
+			@Override
+			public void onFailure(int code, String msg) {
+				ViewUtil.getInstance().showToast("注册失败："+msg);
+				//toast("错误码："+code+",错误原因："+msg);
+			}
 		});
 	}
-	
+
 	private void byEmailRegist() {
 		if(username2.getText().toString().trim().equals("")) {
 			username2.setError("请输入用户昵称");
@@ -291,23 +318,23 @@ public class RegistActivity extends Activity implements OnClickListener {
 		user.setUsername(username2.getText().toString().trim());
 		user.setPassword(password2.getText().toString().trim());
 		user.setEmail(email.getText().toString().trim());
-		
+
 		user.signUp(this, new SaveListener() {
-		    @Override
-		    public void onSuccess() {
-		    	ViewUtil.getInstance().showToast("注册成功!");
-		    	User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
-		    	UserManager.getInstance().setUser(user);
-		    }
-		    @Override
-		    public void onFailure(int code, String msg) {
-		    	ViewUtil.getInstance().showToast("注册失败:"+msg);
-		    }
+			@Override
+			public void onSuccess() {
+				ViewUtil.getInstance().showToast("注册成功!");
+				User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
+				UserManager.getInstance().setUser(user);
+			}
+			@Override
+			public void onFailure(int code, String msg) {
+				ViewUtil.getInstance().showToast("注册失败:"+msg);
+			}
 		});
-		
+
 	}
-	
-	
+
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
@@ -322,5 +349,5 @@ public class RegistActivity extends Activity implements OnClickListener {
 		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
 				getResources().getDisplayMetrics());
 	}
-	
+
 }
