@@ -29,11 +29,12 @@
             android:gravity="center"
             android:orientation="vertical">
             <TextView 
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ffffff"
                 android:textSize="14sp"
-                android:text="00:06:45"
+                android:text="00:00:00"
                 />
             <TextView 
                 android:layout_width="wrap_content"
@@ -51,11 +52,12 @@
             android:gravity="center"
             android:orientation="vertical">
             <TextView 
+                android:id="@+id/kilometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ffffff"
                 android:textSize="14sp"
-                android:text="1.55"
+                android:text="00.0"
                 />
             <TextView 
                 android:layout_width="wrap_content"
@@ -73,11 +75,12 @@
             android:gravity="center"
             android:orientation="vertical">
             <TextView 
+                android:id="@+id/speed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ffffff"
                 android:textSize="14sp"
-                android:text="13.78km/h"
+                android:text="00.0km/h"
                 />
             <TextView 
                 android:layout_width="wrap_content"

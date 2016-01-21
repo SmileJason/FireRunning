@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.AMapUtils;
@@ -54,6 +55,7 @@ public class MapFragment extends Fragment {
 	private PolylineOptions po;
 	private boolean start,canStart;
 	private CameraUpdate cu;
+	private TextView timeTv,kilometerTv,speedTv;
 
 	//private List<LatLng> latLngs;
 	//private int latLngIndex = 0;
@@ -74,6 +76,11 @@ public class MapFragment extends Fragment {
 		}
 		timeLong = 0;
 		start = false;
+		
+		timeTv.setText("00:00:00");
+		kilometerTv.setText("00.0");
+		speedTv.setText("00.0km/h");
+		
 		//latLngIndex = 0;
 	}
 	
@@ -81,6 +88,11 @@ public class MapFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_map, container, false);
+		
+		timeTv = (TextView) view.findViewById(R.id.time);
+		kilometerTv = (TextView) view.findViewById(R.id.kilometer);
+		speedTv = (TextView) view.findViewById(R.id.speed);
+		
 		mapView = (MapView) view.findViewById(R.id.map);
 		mapView.onCreate(savedInstanceState);
 		init();
@@ -180,6 +192,10 @@ public class MapFragment extends Fragment {
 
 									index++;
 								}
+								
+								timeTv.setText(DateUtil.formatTimeString(timeLong));
+								kilometerTv.setText(String.format("%.1f",meter/1000f));
+								speedTv.setText(String.format("%.1f",distance*3600f/timeLong)+"km/h");
 								
 								Intent uIntent = new Intent();
 								uIntent.setAction(ScheduleFragment.UPDATE_UI);
