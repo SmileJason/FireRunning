@@ -463,10 +463,11 @@ containing a value of this type.
     }
     public static final class id {
         public static final int FILL=0x7f050001;
+        public static final int QZone=0x7f050078;
         public static final int STROKE=0x7f050000;
         public static final int _10k=0x7f05005e;
-        public static final int account=0x7f050079;
-        public static final int add=0x7f05007a;
+        public static final int account=0x7f05007f;
+        public static final int add=0x7f050080;
         public static final int addLine=0x7f050017;
         public static final int againpassword1=0x7f05002b;
         public static final int againpassword2=0x7f050032;
@@ -486,7 +487,7 @@ containing a value of this type.
         public static final int dateTime=0x7f050048;
         public static final int day=0x7f05004f;
         public static final int deletePlan=0x7f050062;
-        public static final int discuss=0x7f05007b;
+        public static final int discuss=0x7f050081;
         public static final int distance=0x7f05001b;
         public static final int distence=0x7f050053;
         public static final int drawer_layout=0x7f050013;
@@ -517,7 +518,7 @@ containing a value of this type.
         public static final int layout_progress_holder=0x7f050056;
         public static final int layout_secondary_progress=0x7f050057;
         public static final int left_drawer=0x7f050014;
-        public static final int left_imageview=0x7f050076;
+        public static final int left_imageview=0x7f05007c;
         public static final int lineGuide=0x7f050026;
         public static final int listview=0x7f050018;
         public static final int loadData=0x7f050068;
@@ -555,28 +556,31 @@ containing a value of this type.
         public static final int pro=0x7f050073;
         public static final int progress=0x7f05001e;
         public static final int progressTxt=0x7f050045;
+        public static final int qq=0x7f050076;
         public static final int regist=0x7f050012;
         public static final int regist_login=0x7f050072;
         public static final int register=0x7f050034;
-        public static final int right_imageview=0x7f050078;
+        public static final int right_imageview=0x7f05007e;
         public static final int runContent=0x7f050042;
         public static final int runCount=0x7f050037;
         public static final int save=0x7f050065;
         public static final int saveProgress=0x7f050066;
         public static final int schedule=0x7f050035;
         public static final int setting=0x7f05004d;
-        public static final int share=0x7f05007c;
+        public static final int share=0x7f050082;
         public static final int shareApp=0x7f05003c;
+        public static final int sina=0x7f050077;
         public static final int speed=0x7f050020;
         public static final int start=0x7f05001d;
         public static final int submit=0x7f05000d;
         public static final int swipe_refresh_widget=0x7f05003d;
+        public static final int tencent=0x7f050079;
         public static final int textPassword=0x7f050006;
         public static final int time=0x7f05001f;
         public static final int timeLength=0x7f050044;
         public static final int title=0x7f05004e;
         public static final int titleBar=0x7f050009;
-        public static final int title_textview=0x7f050077;
+        public static final int title_textview=0x7f05007d;
         public static final int top=0x7f050023;
         public static final int tv_progress=0x7f050059;
         public static final int txt=0x7f05006b;
@@ -587,6 +591,8 @@ containing a value of this type.
         public static final int verifiedCode=0x7f05002d;
         public static final int version=0x7f05003b;
         public static final int week=0x7f050052;
+        public static final int wx=0x7f05007a;
+        public static final int wx_timeline=0x7f05007b;
     }
     public static final class layout {
         public static final int activity_discuss=0x7f030000;
@@ -635,8 +641,9 @@ containing a value of this type.
         public static final int view_left_menu_head=0x7f03002b;
         public static final int view_round_progress=0x7f03002c;
         public static final int view_run_speed_head=0x7f03002d;
-        public static final int view_single_image=0x7f03002e;
-        public static final int view_title_bar=0x7f03002f;
+        public static final int view_share_dialog=0x7f03002e;
+        public static final int view_single_image=0x7f03002f;
+        public static final int view_title_bar=0x7f030030;
     }
     public static final class menu {
         public static final int account_menu=0x7f0b0000;

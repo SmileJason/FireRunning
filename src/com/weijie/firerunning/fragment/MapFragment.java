@@ -195,7 +195,7 @@ public class MapFragment extends Fragment {
 								
 								timeTv.setText(DateUtil.formatTimeString(timeLong));
 								kilometerTv.setText(String.format("%.1f",meter/1000f));
-								speedTv.setText(String.format("%.1f",distance*3600f/timeLong)+"km/h");
+								speedTv.setText(String.format("%.1f",meter*3600f/timeLong)+"km/h");
 								
 								Intent uIntent = new Intent();
 								uIntent.setAction(ScheduleFragment.UPDATE_UI);
