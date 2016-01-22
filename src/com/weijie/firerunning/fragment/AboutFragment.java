@@ -74,7 +74,6 @@ public class AboutFragment extends Fragment implements OnClickListener, Platform
 		version = (TextView) view.findViewById(R.id.version);
 		version.setText(getAppVersionName(getActivity()));
 		view.findViewById(R.id.shareApp).setOnClickListener(this);
-		ShareSDK.initSDK(this.getActivity());
 		return view;
 	}
 
@@ -326,12 +325,6 @@ public class AboutFragment extends Fragment implements OnClickListener, Platform
 		}else{
 			ViewUtil.getInstance().showToast("SD卡不可用，无法分享图片");
 		}
-	}
-
-	@Override
-	public void onDestroy() {
-		ShareSDK.stopSDK(this.getActivity());
-		super.onDestroy();
 	}
 
 }

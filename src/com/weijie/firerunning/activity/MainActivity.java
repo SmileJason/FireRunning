@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import cn.bmob.v3.Bmob;
+import cn.sharesdk.framework.ShareSDK;
 
 import com.weijie.firerunning.Conf;
 import com.weijie.firerunning.R;
@@ -104,14 +105,14 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		user = UserManager.getInstance().getUser();
 		View head = getLayoutInflater().inflate(R.layout.view_left_menu_head,null);
-		username = (TextView) findViewById(R.id.username);
+		username = (TextView) head.findViewById(R.id.username);
 		head.findViewById(R.id.regist_login).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(user==null) {
+				//if(user==null) {
 					//跳到登录或者注册界面
 					startActivityForResult(new Intent(MainActivity.this,LoginActivity.class),LOGIN_REQUEST);
-				}
+				//}
 			}
 		});
 		if(user==null) {
@@ -134,6 +135,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		fs = new Fragment[6];
 		fs[0] = new RunFragment();
 		manager.beginTransaction().add(R.id.content,fs[0]).commit();
+		ShareSDK.initSDK(this);
 	}
 
 	@Override
@@ -142,8 +144,8 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 		switch (position) {
 		case 1:
-			inflater.inflate(R.menu.share_menu, menu);
-			menu.findItem(R.id.share).setVisible(!drawerOpen);
+			//inflater.inflate(R.menu.share_menu, menu);
+			//menu.findItem(R.id.share).setVisible(!drawerOpen);
 			break;
 		case 2:
 			inflater.inflate(R.menu.account_menu, menu);
@@ -171,20 +173,15 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		switch(item.getItemId()) {
 		case R.id.account:
 			if(position==2 && fs[1]!=null) {
-				//startActivity(new Intent(this,ShareActivity.class));
 				((HistoryFragment)fs[1]).shareHistory();
 			} else if(position==1 && fs[0]!=null) {
 				
 			}
 			return true;
 		case R.id.add:
-			//startActivity(new Intent(this,PlanActivity.class));
 			((TrainerFragment)fs[2]).showCreatePlan();
 			return true;
-		case R.id.share:
-			return true;
 		case R.id.discuss:
-			//startActivity(new Intent(this,DiscussActivity.class));
 			startActivityForResult(new Intent(this,DiscussActivity.class), DiscussFragment.DISCUSS_REQUEST);
 			return true;
 		default:
@@ -318,6 +315,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 	@Override
 	protected void onActivityResult(int request, int result, Intent data) {
 		if(request==LOGIN_REQUEST && result==LOGIN_RESULT) {
+			user = UserManager.getInstance().getUser();
 			if(user==null) {
 				username.setText("注册/登录");
 			} else {
@@ -329,6 +327,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 
 	@Override
 	protected void onDestroy() {
+		ShareSDK.stopSDK(this);
 		super.onDestroy();
 	}
 
