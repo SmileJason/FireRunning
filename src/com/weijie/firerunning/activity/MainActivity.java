@@ -43,6 +43,8 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 
 	public static final int PLAN_REQUEST = 10000;
 	public static final int PLAN_RESULT = 10001;
+	public static final int LOGIN_REQUEST = 10002;
+	public static final int LOGIN_RESULT = 10003;
 	
 	private User user;
 
@@ -55,6 +57,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 	private FragmentManager manager;
 	private int position = 1;
 	private ActionBar actionBar;
+	private TextView username;
 	
 	private PlanDay planDay;
 	private PlanWeek planWeek;
@@ -101,16 +104,16 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		user = UserManager.getInstance().getUser();
 		View head = getLayoutInflater().inflate(R.layout.view_left_menu_head,null);
+		username = (TextView) findViewById(R.id.username);
 		head.findViewById(R.id.regist_login).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if(user==null) {
 					//跳到登录或者注册界面
-					startActivity(new Intent(MainActivity.this,LoginActivity.class));
+					startActivityForResult(new Intent(MainActivity.this,LoginActivity.class),LOGIN_REQUEST);
 				}
 			}
 		});
-		TextView username = (TextView) head.findViewById(R.id.username);
 		if(user==null) {
 			username.setText("注册/登录");
 		} else {
@@ -310,6 +313,18 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 	
 	public void updatePlan() {
 		((TrainerFragment)fs[2]).getPlanDatas();
+	}
+
+	@Override
+	protected void onActivityResult(int request, int result, Intent data) {
+		if(request==LOGIN_REQUEST && result==LOGIN_RESULT) {
+			if(user==null) {
+				username.setText("注册/登录");
+			} else {
+				username.setText(user.getUsername());
+			}
+		}
+		super.onActivityResult(request, result, data);
 	}
 
 	@Override

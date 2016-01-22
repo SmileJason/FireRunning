@@ -58,6 +58,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		                	ViewUtil.getInstance().showToast("登录成功");
 		                	user = BmobUser.getCurrentUser(LoginActivity.this,User.class);
 		    		    	UserManager.getInstance().setUser(user);
+		    		    	setResult(MainActivity.LOGIN_RESULT);
 		    		    	finish();
 		                }
 		            }
@@ -65,7 +66,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			}
 			break;
 		case R.id.regist:
-			startActivity(new Intent(this,RegistActivity.class));
+			startActivityForResult(new Intent(this,RegistActivity.class),MainActivity.LOGIN_REQUEST);
 			break;
 		}
 	}
@@ -78,6 +79,15 @@ public class LoginActivity extends Activity implements OnClickListener {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int request, int result, Intent data) {
+		if(request==MainActivity.LOGIN_REQUEST && result==MainActivity.LOGIN_RESULT) {
+			setResult(MainActivity.LOGIN_RESULT);
+			finish();
+		}
+		super.onActivityResult(request, result, data);
 	}
 
 }

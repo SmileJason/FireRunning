@@ -203,20 +203,8 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		discuss.save(DiscussActivity.this,new SaveListener() {
 			@Override
 			public void onSuccess() {
-				//discuss.dateTime = discuss.getCreatedAt();
 				ViewUtil.getInstance().showToast("您的评论已经成功发送！");
 				finish();
-				/*discuss.update(DiscussActivity.this, new UpdateListener() {
-					@Override
-					public void onSuccess() {
-						ViewUtil.getInstance().showToast("您的评论已经成功发送！");
-						finish();
-					}
-					@Override
-					public void onFailure(int code, String msg) {
-						ViewUtil.getInstance().showToast("您的评论发送失败！",code);
-					}
-				});*/
 			}
 			@Override
 			public void onFailure(int code, String msg) {
