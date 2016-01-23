@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import cn.bmob.v3.BmobPushManager;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -190,7 +191,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 			if(city!=null && !city.equals("")) {
 				discuss.hide = city+"用户";
 			} else {
-				discuss.hide = new Date().getTime()+"";
+				discuss.hide = "匿名";
 			}
 		}
 		if(latitude!=0d && longitude!=0d) {
@@ -204,6 +205,8 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 			@Override
 			public void onSuccess() {
 				ViewUtil.getInstance().showToast("您的评论已经成功发送！");
+				BmobPushManager bmobPush = new BmobPushManager(DiscussActivity.this);
+				bmobPush.pushMessageAll("NewDiscuss");
 				finish();
 			}
 			@Override

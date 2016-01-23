@@ -50,11 +50,11 @@
 			易信好友        http://open.yixin.im/
 			明道	           http://open.mingdao.com/
 			Line           http://media.line.me/zh-hant/
-			Pocket         http://getpocket.com/developer/apps/new
+			Pocket         http://getpocket.com/developer/apps/new
     -->
 
     <ShareSDK AppKey="eff8fe03f53c" />
- <!-- 修改成你在sharesdk后台注册的应用的appkey" -->
+    <!-- 修改成你在sharesdk后台注册的应用的appkey" -->
 
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
@@ -67,7 +67,14 @@
         RedirectUrl="http://www.sharesdk.cn"
         ShareByAppClient="false"
         SortId="1" />
-        
+
+    <!-- <TencentWeibo
+        AppKey="801307650"
+        AppSecret="ae36f4ee3946e1cbb98d6965b0b2ff5c"
+        Enable="true"
+        Id="2"
+        RedirectUri="http://sharesdk.cn"
+        SortId="2" /> -->
     <TencentWeibo
         AppKey="801307650"
         AppSecret="ae36f4ee3946e1cbb98d6965b0b2ff5c"
@@ -78,21 +85,24 @@
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
 
-    <!-- <QZone
+
+    <!--
+         <QZone
         AppId="100371282"
         AppKey="aed9b0303e3ed1e27bae87c33761161d"
         Enable="true"
         Id="3"
         ShareByAppClient="false"
-        SortId="3" /> -->
-    
+        SortId="3" />
+    -->
+
     <QZone
+        AppId="1105131904"
+        AppKey="C9lsWeRcJZQ61UM1"
+        Enable="true"
         Id="3"
-        SortId="3"
-        AppId="100371282"
-        AppKey="aed9b0303e3ed1e27bae87c33761161d"
         ShareByAppClient="true"
-        Enable="true" />
+        SortId="3" />
 
     <!--
     	Wechat微信和WechatMoments微信朋友圈的appid是一样的；
@@ -104,7 +114,7 @@
 		
 		BypassApproval是绕过审核的标记，设置为true后AppId将被忽略，故不经过
 		审核的应用也可以执行分享，但是仅限于分享文字和图片，不能分享其他类型，
-		默认值为false。此外，微信收藏不支持此字段。
+		默认值为false。此外，微信收藏不支持此字段。
     -->
     <!--
     <Wechat
@@ -121,10 +131,12 @@
         AppId="wx4868b35061f87885"
         AppSecret="64020361b8ec4c99936c0e3999a9f249"
         BypassApproval="false"
-        Enable="true" />
+        Enable="true" />
     -->
 
-    <!-- <Wechat
+
+    <!--
+    <Wechat
         AppId="wx4868b35061f87885"
         BypassApproval="true"
         Enable="true"
@@ -138,22 +150,24 @@
         Enable="true"
         Id="5"
         ShortLinkConversationEnable="false"
-        SortId="5" /> -->
+        SortId="5" />
+    -->
+
     <Wechat
+        AppId="wx76a486f10a03e863"
+        AppSecret="0ead55d9cc899c3b95e2da6842da73df"
+        BypassApproval="true"
+        Enable="true"
         Id="4"
-        SortId="4"
-        AppId="wx76a486f10a03e863"
-        AppSecret="0ead55d9cc899c3b95e2da6842da73df"
-        BypassApproval="true"
-        Enable="true" />
-    
+        SortId="4" />
+
     <WechatMoments
-        Id="5"
-        SortId="5"
         AppId="wx76a486f10a03e863"
         AppSecret="0ead55d9cc899c3b95e2da6842da73df"
         BypassApproval="true"
-        Enable="true" />
+        Enable="true"
+        Id="5"
+        SortId="5" />
 
     <WechatFavorite
         AppId="wx4868b35061f87885"
@@ -164,9 +178,20 @@
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
 
-    <QQ
+
+    <!--
+         <QQ
         AppId="100371282"
         AppKey="aed9b0303e3ed1e27bae87c33761161d"
+        Enable="true"
+        Id="7"
+        ShareByAppClient="true"
+        SortId="7" />
+    -->
+
+    <QQ
+        AppId="1105131904"
+        AppKey="C9lsWeRcJZQ61UM1"
         Enable="true"
         Id="7"
         ShareByAppClient="true"
@@ -247,7 +272,7 @@
     	“product”。
     	
     	如果目标设备上已经安装了印象笔记客户端，ShareSDK允许应用调用本地API来完成分享，但
-    	是需要将应用信息中的“ShareByAppClient”设置为true，此字段默认值为false。
+    	是需要将应用信息中的“ShareByAppClient”设置为true，此字段默认值为false。
     -->
 
     <Evernote
@@ -334,7 +359,7 @@
 		
 		BypassApproval是绕过审核的标记，设置为true后AppId将被忽略，故不经过
 		审核的应用也可以执行分享，但是仅限于分享文字或图片，不能分享其他类型，
-		默认值为false。
+		默认值为false。
     -->
 
     <Yixin

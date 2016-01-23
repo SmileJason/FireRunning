@@ -1,8 +1,10 @@
 package com.weijie.firerunning.bean;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
-public class Discuss extends BmobObject {
+public class Discuss extends BmobObject implements Serializable {
 
 	public String content;
 	//坐标。可有可无

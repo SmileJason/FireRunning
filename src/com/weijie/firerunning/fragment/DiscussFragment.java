@@ -26,6 +26,7 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.listener.FindListener;
 
 import com.weijie.firerunning.R;
+import com.weijie.firerunning.activity.CommentActivity;
 import com.weijie.firerunning.adapter.DiscussAdapter;
 import com.weijie.firerunning.bean.Discuss;
 import com.weijie.firerunning.util.ViewUtil;
@@ -122,65 +123,6 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 	}
 
 	private void getData(final boolean refresh,final boolean load,String...dateTime){
-		/*if(ace==null) {
-			ace = new AsyncCustomEndpoints();
-		}
-
-		JSONObject params = new JSONObject();
-		try {
-			params.put("index", 0);
-			if(dateTime!=null && dateTime.length>0) {
-				params.put("dateTime", "'"+dateTime[0]+"'");
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		ace.callEndpoint(this.getActivity(), "getDiscusses", params, 
-				new CloudCodeListener() {
-			@Override
-			public void onSuccess(Object object) {
-				//toast("云端usertest方法返回:" + object.toString());
-				//ViewUtil.getInstance().showToast(object.toString());
-				if(object!=null) {
-					List<Discuss> dis;
-					try {
-						dis = JSONUtil.toList(new JSONObject(object.toString()), "results", typeToken);
-						if(dis!=null && dis.size()>0) {
-							if(refresh) {
-								discusses.clear();
-							}
-							discusses.addAll(dis);
-							if(adapter==null) {
-								adapter = new DiscussAdapter(discusses, getActivity());
-								listView.setAdapter(adapter);
-							} else {
-								adapter.notifyDataSetChanged();
-							}
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-
-					if(refresh) {
-						mSwipeRefreshWidget.setRefreshing(false);
-					} else if(load) {
-						loadData.setText("点击加载更多数据");
-						loadProgress.setVisibility(View.GONE);
-					}
-				}
-			}
-			@Override
-			public void onFailure(int code, String msg) {
-				ViewUtil.getInstance().showToast(msg);
-				if(refresh) {
-					mSwipeRefreshWidget.setRefreshing(false);
-				} else if(load) {
-					loadData.setText("点击加载更多数据");
-					loadProgress.setVisibility(View.GONE);
-				}
-			}
-		});*/
 
 		BmobQuery<Discuss> query = new BmobQuery<Discuss>();
 		if(discusses!=null && discusses.size()>0) {
@@ -260,7 +202,10 @@ public class DiscussFragment extends Fragment implements OnItemClickListener, On
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-		
+		Discuss discuss = discusses.get(position);
+		Intent intent = new Intent(this.getActivity(),CommentActivity.class);
+		intent.putExtra("discuss", discuss);
+		startActivity(intent);
 	}
 
 }

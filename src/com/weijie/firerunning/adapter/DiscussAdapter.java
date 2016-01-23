@@ -98,9 +98,9 @@ public class DiscussAdapter extends BaseAdapter {
 				//String[] us = new String[urls.length];
 				for(int i=0;i<5;i++) {
 					//RoundAngleImageView2 img = (RoundAngleImageView2) holder.layout.getChildAt(i).findViewById(R.id.img);
-					RoundAngleImageView img = (RoundAngleImageView) holder.layout.getChildAt(i).findViewById(R.id.img);
 					if(i<urls.length) {
-						img.setVisibility(View.VISIBLE);
+						holder.layout.getChildAt(i).setVisibility(View.VISIBLE);
+						RoundAngleImageView img = (RoundAngleImageView) holder.layout.getChildAt(i).findViewById(R.id.img);
 						//img.setImageDrawable(context.getResources().getDrawable(R.drawable.image_load_cache));
 						//String url = BmobProFile.getInstance(context).signURL(files[i], urls[i], "80d9fa19187ad1a676248865c82b27ba", 100, "e8d70dfe20a2e648");
 						String url = BmobProFile.getInstance(context).signURL(files[i], urls[i], "68c14de64572e77eb8039d5781202301", 0, null);
@@ -108,7 +108,7 @@ public class DiscussAdapter extends BaseAdapter {
 						//us[i] = url;
 					} else {
 						//RoundAngleImageView img = (RoundAngleImageView) holder.layout.getChildAt(i).findViewById(R.id.img);
-						img.setVisibility(View.GONE);
+						holder.layout.getChildAt(i).setVisibility(View.GONE);
 					}
 				}
 				/*for(int i=0;i<us.length;i++) {

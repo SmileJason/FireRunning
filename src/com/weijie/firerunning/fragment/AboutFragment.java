@@ -39,6 +39,7 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.tencent.qq.QQClientNotExistException;
+import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.tencent.weibo.TencentWeibo;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
@@ -121,8 +122,12 @@ public class AboutFragment extends Fragment implements OnClickListener, Platform
 			switch (view.getId()) {
 			case R.id.qq:
 				shareParams = new QQ.ShareParams();
-				shareParams.setShareType(Platform.SHARE_TEXT);
+				//shareParams.setShareType(Platform.SHARE_TEXT);
+				shareParams.setShareType(Platform.SHARE_IMAGE);
 				shareParams.setText("FireRunning最新版本下载地址："+path);
+				if(qrcodeFile != null && qrcodeFile.exists()){
+					shareParams.setImagePath(qrcodeFile.getAbsolutePath());
+				}
 				doShare(shareParams, QQ.NAME);
 				break;
 			case R.id.sina:
@@ -135,13 +140,18 @@ public class AboutFragment extends Fragment implements OnClickListener, Platform
 				doShare(shareParams, SinaWeibo.NAME);
 				break;
 			case R.id.QZone:
-				/*shareParams = new QZone.ShareParams();
-				shareParams.setShareType(Platform.SHARE_IMAGE);
+				shareParams = new QZone.ShareParams();
+				//shareParams.setShareType(Platform.SHARE_IMAGE);
 				//shareParams.setText("药膳居最新版本下载地址："+path);
-				if(qrcodeFile != null && qrcodeFile.exists()){
+				/*if(qrcodeFile != null && qrcodeFile.exists()){
 					shareParams.setImagePath(qrcodeFile.getAbsolutePath());
-				}
-				doShare(shareParams, QZone.NAME);*/
+				}*/
+				shareParams.setTitle("FireRunning");
+				shareParams.setTitleUrl("http://sharesdk.cn");
+				shareParams.setText("FireRunning最新版本下载地址："+path);
+				shareParams.setSite("FireRunning");
+				shareParams.setSiteUrl("http://sharesdk.cn");
+				doShare(shareParams, QZone.NAME);
 				break;
 			case R.id.tencent:
 				shareParams = new TencentWeibo.ShareParams();

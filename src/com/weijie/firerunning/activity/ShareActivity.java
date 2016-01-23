@@ -156,12 +156,14 @@ public class ShareActivity extends Activity implements PlatformActionListener,Ca
 				doShare(shareParams, SinaWeibo.NAME);
 				break;
 			case R.id.QZone:
-				shareParams = new QZone.ShareParams();
-				shareParams.setShareType(Platform.SHARE_IMAGE);
+				//shareParams = new QZone.ShareParams();
+				//shareParams.setShareType(Platform.SHARE_IMAGE);
 				//shareParams.setText("药膳居最新版本下载地址："+path);
+				/*shareParams.setTitle("FireRunning");
+				shareParams.setTitleUrl("http://sharesdk.cn");
 				shareParams.setText("FireRunning分享纪录！");
 				shareParams.setImagePath(path);
-				doShare(shareParams, QZone.NAME);
+				doShare(shareParams, QZone.NAME);*/
 				break;
 			case R.id.tencent:
 				shareParams = new TencentWeibo.ShareParams();

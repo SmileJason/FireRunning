@@ -1,6 +1,9 @@
 package com.weijie.firerunning;
 
 import android.app.Application;
+import cn.bmob.push.BmobPush;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -28,6 +31,13 @@ public class App extends Application {
 		DataBaseUtil.getInstance().setContext(this);
 		ViewUtil.getInstance().setContext(this);
 		requestQueue = Volley.newRequestQueue(this,new HttpsStack(this));
+		
+		// 初始化BmobSDK
+	    Bmob.initialize(this, Conf.ApplicationID);
+	    // 使用推送服务时的初始化操作
+	    BmobInstallation.getCurrentInstallation(this).save();
+	    // 启动推送服务
+	    BmobPush.startWork(this, Conf.ApplicationID);
 	}
 	
 	public RequestQueue getRequestQueue(){

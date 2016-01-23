@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		super.onCreate(savedInstanceState);
 		// 初始化 Bmob SDK
         // 使用时请将第二个参数Application ID替换成你在Bmob服务器端创建的Application ID
-		Bmob.initialize(this, Conf.ApplicationID);
+		//Bmob.initialize(this, Conf.ApplicationID);
 		
 		setContentView(R.layout.activity_main);
 		manager = getSupportFragmentManager();
