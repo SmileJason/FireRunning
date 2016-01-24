@@ -4,8 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -13,6 +20,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,13 +30,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import cn.bmob.v3.Bmob;
 import cn.sharesdk.framework.ShareSDK;
 
-import com.weijie.firerunning.Conf;
 import com.weijie.firerunning.R;
 import com.weijie.firerunning.UserManager;
 import com.weijie.firerunning.adapter.MenuAdapter;
+import com.weijie.firerunning.bean.AppInfo;
 import com.weijie.firerunning.bean.Plan;
 import com.weijie.firerunning.bean.PlanDay;
 import com.weijie.firerunning.bean.PlanWeek;
@@ -39,6 +46,7 @@ import com.weijie.firerunning.fragment.ErrorFragment;
 import com.weijie.firerunning.fragment.HistoryFragment;
 import com.weijie.firerunning.fragment.RunFragment;
 import com.weijie.firerunning.fragment.TrainerFragment;
+import com.weijie.firerunning.service.UpdateService;
 
 public class MainActivity extends FragmentActivity implements OnItemClickListener {
 
@@ -63,6 +71,50 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 	private PlanDay planDay;
 	private PlanWeek planWeek;
 	private Plan plan;
+	
+	private Intent downloadIntent;
+	
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if(intent !=null){
+				//软件更新广播
+				if( UpdateService.UPDATE_ACTION.equals(intent.getAction())){
+					showUpdateDialog((AppInfo) intent.getSerializableExtra(UpdateService.EXTRA_INFO));
+				}
+			}
+		}
+	};
+	
+	/**
+	 * 显示更新对话框
+	 * @param info
+	 */
+	public void showUpdateDialog(AppInfo info){
+		Builder builder = new AlertDialog.Builder(this)
+		.setTitle(TextUtils.isEmpty(info.getTitle())?"更新":info.getTitle())
+		.setMessage(info.getDesc())
+		.setPositiveButton("立即更新", dialogListener);
+
+		if(!info.isForced()){
+			builder.setNegativeButton("取消",dialogListener);
+		}
+
+		downloadIntent = new Intent(Intent.ACTION_VIEW);
+		downloadIntent.setData(Uri.parse(info.getUrl()));
+
+		builder.setCancelable(false).show();
+	}
+
+	DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			if(which == DialogInterface.BUTTON_POSITIVE){
+				startActivity(downloadIntent);
+				finish();
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,13 +180,19 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 		menus.add(new com.weijie.firerunning.bean.MenuItem("教练", R.drawable.ic_trainer));
 		menus.add(new com.weijie.firerunning.bean.MenuItem("讨论", R.drawable.ic_discuss));
 		menus.add(new com.weijie.firerunning.bean.MenuItem("关于", R.drawable.ic_about));
-		menus.add(new com.weijie.firerunning.bean.MenuItem("BUG报告", R.drawable.ic_error_msg));
+		//menus.add(new com.weijie.firerunning.bean.MenuItem("BUG报告", R.drawable.ic_error_msg));
 		adapter = new MenuAdapter(menus,this);
 		mDrawerList.setAdapter(adapter);
 		mDrawerList.setOnItemClickListener(this);
-		fs = new Fragment[6];
+		fs = new Fragment[5];
 		fs[0] = new RunFragment();
 		manager.beginTransaction().add(R.id.content,fs[0]).commit();
+		
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(UpdateService.UPDATE_ACTION);
+		registerReceiver(mReceiver, filter);
+		startService(new Intent(this,UpdateService.class));
+		
 		ShareSDK.initSDK(this);
 	}
 
@@ -231,9 +289,9 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 				case 5:
 					actionBar.setTitle("关于");
 					break;
-				case 6:
+				/*case 6:
 					actionBar.setTitle("BUG报告");
-					break;
+					break;*/
 				}
 				showFragment(position-1);
 				this.position = position;
@@ -327,6 +385,10 @@ public class MainActivity extends FragmentActivity implements OnItemClickListene
 
 	@Override
 	protected void onDestroy() {
+		if (mReceiver != null) {
+			unregisterReceiver(mReceiver);
+		}
+		stopService(new Intent(this,UpdateService.class));
 		ShareSDK.stopSDK(this);
 		super.onDestroy();
 	}

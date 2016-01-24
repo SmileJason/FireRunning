@@ -73,6 +73,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 	private List<RoundAngleImageView> imgs;
 	private ImageDialog imgDialog;
 	private EditText content;
+	private View loading;
 
 	private User user;
 	private Discuss discuss;
@@ -100,6 +101,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		height = width;
 		inflater = LayoutInflater.from(this);
 
+		loading = findViewById(R.id.loading);
 		content = (EditText) findViewById(R.id.content);
 		lineLayout = (LinearLayout) findViewById(R.id.layout);
 
@@ -134,6 +136,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 						try {
 							if(isFinish){
 								pDialog.dismiss();
+								loading.setVisibility(View.VISIBLE);
 								StringBuffer sbURL = null;
 								if(urls!=null && urls.length>0) {
 									sbURL = new StringBuffer();
@@ -174,6 +177,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 					}
 				});
 			} else {
+				loading.setVisibility(View.VISIBLE);
 				saveDiscuss(content.getText().toString().trim(),null,null);
 			}
 		} else {
@@ -204,6 +208,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 		discuss.save(DiscussActivity.this,new SaveListener() {
 			@Override
 			public void onSuccess() {
+				loading.setVisibility(View.GONE);
 				ViewUtil.getInstance().showToast("您的评论已经成功发送！");
 				BmobPushManager bmobPush = new BmobPushManager(DiscussActivity.this);
 				bmobPush.pushMessageAll("NewDiscuss");
@@ -211,6 +216,7 @@ public class DiscussActivity extends FragmentActivity implements OnClickListener
 			}
 			@Override
 			public void onFailure(int code, String msg) {
+				loading.setVisibility(View.GONE);
 				ViewUtil.getInstance().showToast("您的评论发送失败！",code);
 			}
 		});

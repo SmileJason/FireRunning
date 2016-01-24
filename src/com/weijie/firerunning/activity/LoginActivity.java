@@ -21,6 +21,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	private ActionBar actionBar;
 	private InputView username,password;
+	private View loading;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.titlebar_background));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
+		findViewById(R.id.forgetpsw).setOnClickListener(this);
 		findViewById(R.id.regist).setOnClickListener(this);
 		findViewById(R.id.login).setOnClickListener(this);
+		loading = findViewById(R.id.loading);
 		username = (InputView) findViewById(R.id.username);
 		password = (InputView) findViewById(R.id.password);
 	}
@@ -51,15 +54,20 @@ public class LoginActivity extends Activity implements OnClickListener {
 			} else if(password.getText().equals("")) {
 				password.setError("密码不能为空");
 			} else {
+				loading.setVisibility(View.VISIBLE);
 				BmobUser.loginByAccount(this, username.getText(), password.getText(), new LogInListener<User>() {
 		            @Override
 		            public void done(User user, BmobException e) {
 		                if(user!=null){
+		                	loading.setVisibility(View.GONE);
 		                	ViewUtil.getInstance().showToast("登录成功");
 		                	user = BmobUser.getCurrentUser(LoginActivity.this,User.class);
 		    		    	UserManager.getInstance().setUser(user);
 		    		    	setResult(MainActivity.LOGIN_RESULT);
 		    		    	finish();
+		                } else {
+		                	loading.setVisibility(View.GONE);
+		                	ViewUtil.getInstance().showToast("登录失败:"+e.getMessage());
 		                }
 		            }
 		        });
@@ -67,6 +75,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.regist:
 			startActivityForResult(new Intent(this,RegistActivity.class),MainActivity.LOGIN_REQUEST);
+			break;
+		case R.id.forgetpsw:
+			startActivityForResult(new Intent(this,ResetPasswordActivity.class),MainActivity.LOGIN_REQUEST);
 			break;
 		}
 	}

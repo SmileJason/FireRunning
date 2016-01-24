@@ -3,7 +3,10 @@ package com.weijie.firerunning.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,6 +23,7 @@ public class InputView extends LinearLayout {
 	
 	private EditText edit;
 	private ImageView lIcon,rIcon;
+	private boolean psw = false;
 	
 	public InputView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -65,6 +69,19 @@ public class InputView extends LinearLayout {
 		case 5:
 			edit.setInputType(EditorInfo.TYPE_CLASS_NUMBER
 					| EditorInfo.TYPE_NUMBER_VARIATION_PASSWORD);
+			if(rIcon!=null) {
+				rIcon.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						psw = !psw;
+						if(psw) {
+							edit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+						} else {
+							edit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+						}
+					}
+				});
+			}
 			break;
 		case 6:
 			edit.setInputType(EditorInfo.TYPE_CLASS_PHONE);

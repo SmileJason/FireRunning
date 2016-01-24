@@ -11,13 +11,17 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -27,18 +31,40 @@ import cn.bmob.v3.listener.SaveListener;
 import com.weijie.firerunning.R;
 import com.weijie.firerunning.UserManager;
 import com.weijie.firerunning.bean.User;
+import com.weijie.firerunning.util.Countdown;
+import com.weijie.firerunning.util.RegexUtils;
 import com.weijie.firerunning.util.ViewUtil;
 import com.weijie.firerunning.view.InputView;
 
 public class RegistActivity extends Activity implements OnClickListener {
 
+	static final String GET_VERCODE = "重发验证码 ";
+	
 	private ActionBar actionBar;
 	private View byPhone,byEmail,lineGuide,phoneIndex,emailIndex,register;
 
 	private RelativeLayout content;
 	private LayoutTransition mTransitioner;
 	private InputView username1,username2,password1,againpassword1,password2,againpassword2,phonenumber,email,verifiedCode;
-
+	private View loading;
+	private TextView loadMsg;
+	private Button getVerifiedCode;
+	private Countdown mCountdown;
+	
+	Handler countdownHandler = new Handler(new Handler.Callback() {
+		@Override
+		public boolean handleMessage(Message msg) {
+			getVerifiedCode.setEnabled(msg.what == 0);
+			if (msg.what == 0) {
+				getVerifiedCode.setEnabled(true);
+				getVerifiedCode.setText(GET_VERCODE);
+			} else {
+				getVerifiedCode.setText(GET_VERCODE + msg.what);
+			}
+			return true;
+		}
+	});
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,6 +79,8 @@ public class RegistActivity extends Activity implements OnClickListener {
 		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.titlebar_background));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
+		loading = findViewById(R.id.loading);
+		loadMsg = (TextView) findViewById(R.id.loadMsg);
 		content = (RelativeLayout) findViewById(R.id.content);
 		resetTransition();    
 
@@ -75,12 +103,16 @@ public class RegistActivity extends Activity implements OnClickListener {
 		byPhone.setOnClickListener(this);
 		byEmail.setOnClickListener(this);
 		register.setOnClickListener(this);
-		findViewById(R.id.getVerifiedCode).setOnClickListener(this);
+		getVerifiedCode = (Button) findViewById(R.id.getVerifiedCode);
+		getVerifiedCode.setOnClickListener(this);
 		byPhone.setSelected(true);
 		WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 		int width = wm.getDefaultDisplay().getWidth();
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width/2, (int)dp2px(2));
 		lineGuide.setLayoutParams(params);
+		
+		mCountdown = new Countdown(countdownHandler,60);
+		//mCountdown.start();
 	}
 
 	private void resetTransition() {  
@@ -238,13 +270,20 @@ public class RegistActivity extends Activity implements OnClickListener {
 			if(phonenumber.getText().toString().trim().equals("")) {
 				phonenumber.setError("请输入手机号码");
 				return;
+			} else if(!RegexUtils.isHandset(phonenumber.getText().toString().trim())) {
+				phonenumber.setError("请输入正确的手机号码");
+				return;
 			} else {
+				loadMsg.setText("正在获取验证码！请稍等......");
+				loading.setVisibility(View.VISIBLE);
 				BmobSMS.requestSMSCode(this, phonenumber.getText().toString().trim(),"FireCode", new RequestSMSCodeListener() {
-
 					@Override
 					public void done(Integer smsId, BmobException ex) {
+						loading.setVisibility(View.GONE);
 						if(ex==null){//验证码发送成功
-							ViewUtil.getInstance().showToast("短信id："+smsId);
+							getVerifiedCode.setEnabled(false);
+							mCountdown.start();
+							ViewUtil.getInstance().showToast("信息已发送成功！");
 						} else {
 							ViewUtil.getInstance().showToast("验证码发送失败"+ex.getMessage());
 						}
@@ -268,13 +307,21 @@ public class RegistActivity extends Activity implements OnClickListener {
 		} else if(!password1.getText().toString().trim().equals(againpassword1.getText().toString().trim())) {
 			againpassword1.setError("两次输入的密码不一致，请重新输入");
 			return;
+		} else if(!RegexUtils.isPassword(password1.getText().toString().trim())) {
+			password1.setError("输入密码长度 (6-18位)");
+			return;
 		} else if(phonenumber.getText().toString().trim().equals("")) {
 			phonenumber.setError("请输入手机号码");
+			return;
+		} else if(!RegexUtils.isHandset(phonenumber.getText().toString().trim())) {
+			phonenumber.setError("请输入正确的手机号码");
 			return;
 		} else if(verifiedCode.getText().toString().trim().equals("")) {
 			verifiedCode.setError("请输入验证码");
 			return;
 		}
+		loadMsg.setText("正在注册！请稍等......");
+		loading.setVisibility(View.VISIBLE);
 		User user = new User();
 		user.setUsername(username1.getText().toString().trim());
 		user.setPassword(password1.getText().toString().trim());
@@ -285,12 +332,14 @@ public class RegistActivity extends Activity implements OnClickListener {
 			public void onSuccess() {
 				//toast("注册或登录成功");
 				//Log.i("smile", ""+user.getUsername()+"-"+user.getAge()+"-"+user.getObjectId());
+				loading.setVisibility(View.GONE);
 				ViewUtil.getInstance().showToast("注册成功");
 				User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
 				UserManager.getInstance().setUser(user);
 			}
 			@Override
 			public void onFailure(int code, String msg) {
+				loading.setVisibility(View.GONE);
 				ViewUtil.getInstance().showToast("注册失败："+msg);
 				//toast("错误码："+code+",错误原因："+msg);
 			}
@@ -310,10 +359,18 @@ public class RegistActivity extends Activity implements OnClickListener {
 		} else if(!password2.getText().toString().trim().equals(againpassword2.getText().toString().trim())) {
 			againpassword2.setError("两次输入的密码不一致，请重新输入");
 			return;
+		} else if(!RegexUtils.isPassword(password2.getText().toString().trim())) {
+			password2.setError("输入密码长度 (6-18位)");
+			return;
 		} else if(email.getText().toString().trim().equals("")) {
 			email.setError("请输入邮箱");
 			return;
+		} else if(!RegexUtils.isEmail(email.getText().toString().trim())) {
+			email.setError("请输入正确的邮箱");
+			return;
 		}
+		loadMsg.setText("正在注册！请稍等......");
+		loading.setVisibility(View.VISIBLE);
 		User user = new User();
 		user.setUsername(username2.getText().toString().trim());
 		user.setPassword(password2.getText().toString().trim());
@@ -322,6 +379,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 		user.signUp(this, new SaveListener() {
 			@Override
 			public void onSuccess() {
+				loading.setVisibility(View.GONE);
 				ViewUtil.getInstance().showToast("注册成功!");
 				User user = BmobUser.getCurrentUser(RegistActivity.this,User.class);
 				UserManager.getInstance().setUser(user);
@@ -330,6 +388,7 @@ public class RegistActivity extends Activity implements OnClickListener {
 			}
 			@Override
 			public void onFailure(int code, String msg) {
+				loading.setVisibility(View.GONE);
 				ViewUtil.getInstance().showToast("注册失败:"+msg);
 			}
 		});
@@ -352,4 +411,12 @@ public class RegistActivity extends Activity implements OnClickListener {
 				getResources().getDisplayMetrics());
 	}
 
+	@Override
+	protected void onDestroy() {
+		if(mCountdown != null){
+			mCountdown.stop();
+		}
+		super.onDestroy();
+	}
+	
 }

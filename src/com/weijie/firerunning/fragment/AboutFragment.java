@@ -66,7 +66,7 @@ public class AboutFragment extends Fragment implements OnClickListener, Platform
 	private Platform platform;
 	private File qrcodeFile;
 	private Bitmap qrcodeBm;
-	private String path = "";
+	public static String path = "";
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

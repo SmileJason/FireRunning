@@ -1,7 +1,5 @@
 package com.weijie.firerunning;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -19,6 +17,9 @@ import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+import cn.bmob.v3.listener.SaveListener;
+
+import com.weijie.firerunning.bean.ErrorTable;
   
 /** 
  * UncaughtException处理类,当程序发生Uncaught异常的时候,有该类来接管程序,并记录发送错误报告. 
@@ -104,7 +105,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
         //收集设备参数信息   
         collectDeviceInfo(mContext);  
         //保存日志文件   
-        saveCrashInfo2File(ex);  
+        //saveCrashInfo2File(ex);  
+        sendToBmob(ex);  
         return true;  
     }  
       
@@ -143,7 +145,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * @param ex 
      * @return  返回文件名称,便于将文件传送到服务器 
      */  
-    private String saveCrashInfo2File(Throwable ex) {  
+    /*private String saveCrashInfo2File(Throwable ex) {  
           
         StringBuffer sb = new StringBuffer();  
         for (Map.Entry<String, String> entry : infos.entrySet()) {  
@@ -179,5 +181,37 @@ public class CrashHandler implements UncaughtExceptionHandler {
             Log.e(TAG, "an error occured while writing file...", e);  
         }  
         return null;  
-    }  
+    } */ 
+    
+    
+    private void sendToBmob(Throwable ex) {
+    	StringBuffer sb = new StringBuffer();  
+        for (Map.Entry<String, String> entry : infos.entrySet()) {  
+            String key = entry.getKey();  
+            String value = entry.getValue();  
+            sb.append(key + "=" + value + "\n");  
+        }  
+          
+        Writer writer = new StringWriter();  
+        PrintWriter printWriter = new PrintWriter(writer);  
+        ex.printStackTrace(printWriter);  
+        Throwable cause = ex.getCause();  
+        while (cause != null) {  
+            cause.printStackTrace(printWriter);  
+            cause = cause.getCause();  
+        }  
+        printWriter.close();  
+        String result = writer.toString();  
+        sb.append(result);  
+        ErrorTable error = new ErrorTable(sb.toString());  
+        error.save(mContext,new SaveListener() {
+			@Override
+			public void onSuccess() {
+			}
+			@Override
+			public void onFailure(int code, String msg) {
+			}
+		});
+    }
+    
 } 

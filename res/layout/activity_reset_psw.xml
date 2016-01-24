@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:running="http://schemas.android.com/apk/res/com.weijie.firerunning"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e8e9eA" >
+
+    <LinearLayout
+        android:id="@+id/resetpsw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+
+        <com.weijie.firerunning.view.InputView
+            android:id="@+id/password1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/title_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            running:input_hint="请输入密码"
+            running:input_left="@drawable/login_key"
+            running:input_right="@drawable/login_key_invisiable"
+            running:input_type="numberPassword" >
+        </com.weijie.firerunning.view.InputView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+
+        <com.weijie.firerunning.view.InputView
+            android:id="@+id/againpassword1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/title_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            running:input_hint="请再次输入密码"
+            running:input_left="@drawable/login_key"
+            running:input_right="@drawable/login_key_invisiable"
+            running:input_type="numberPassword" >
+        </com.weijie.firerunning.view.InputView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+
+        <com.weijie.firerunning.view.InputView
+            android:id="@+id/phonenumber"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/title_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            running:input_hint="手机号码"
+            running:input_left="@drawable/register_phone"
+            running:input_type="none" >
+        </com.weijie.firerunning.view.InputView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/title_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <com.weijie.firerunning.view.InputView
+                android:id="@+id/verifiedCode"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@color/title_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                running:input_hint="验证码"
+                running:input_left="@drawable/validate_code"
+                running:input_type="none" >
+            </com.weijie.firerunning.view.InputView>
+
+            <Button
+                android:id="@+id/getVerifiedCode"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/verified_button_bg"
+                android:minHeight="0dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="获取验证码"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+    </LinearLayout>
+    
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/resetpsw"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/blue_button_bg"
+        android:minHeight="0dp"
+        android:text="修改密码"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+    
+    <LinearLayout 
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical"
+        android:background="@drawable/loadview_bg"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:padding="10dp"
+        >
+        
+        <ProgressBar 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleSmall"/>
+        
+        <TextView 
+            android:id="@+id/loadMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:text="正在处理，请稍等......"/>
+        
+    </LinearLayout>
+
+</RelativeLayout>

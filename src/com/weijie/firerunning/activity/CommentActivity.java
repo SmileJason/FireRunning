@@ -56,6 +56,7 @@ public class CommentActivity extends Activity implements OnClickListener, OnRefr
 	private ProgressBar loadProgress;
 	private TextView loadData;
 	private SwipeRefreshLayout mSwipeRefreshWidget;
+	private View loading;
 
 	private final Runnable mRefreshDone = new Runnable() {
 		@Override
@@ -119,6 +120,7 @@ public class CommentActivity extends Activity implements OnClickListener, OnRefr
 			}
 		}
 
+		loading = findViewById(R.id.loading);
 		commentContent = (EditText) findViewById(R.id.commentContent);
 		comment = (LinearLayout) findViewById(R.id.comment);
 		loadProgress = (ProgressBar) findViewById(R.id.loadProgress);
@@ -287,6 +289,7 @@ public class CommentActivity extends Activity implements OnClickListener, OnRefr
 			if(msg.equals("")) {
 				ViewUtil.getInstance().showToast("请输入评论内容再提交！");
 			} else {
+				loading.setVisibility(View.VISIBLE);
 				UserManager manager = UserManager.getInstance();
 				User user = manager.getUser();
 				final Comment c = new Comment();
@@ -300,6 +303,7 @@ public class CommentActivity extends Activity implements OnClickListener, OnRefr
 				c.save(CommentActivity.this,new SaveListener() {
 					@Override
 					public void onSuccess() {
+						loading.setVisibility(View.GONE);
 						ViewUtil.getInstance().showToast("您的评论已经成功发送！");
 						comments.add(0, c);
 						View view = inflater.inflate(R.layout.item_comment, comment, false);
@@ -318,6 +322,7 @@ public class CommentActivity extends Activity implements OnClickListener, OnRefr
 					}
 					@Override
 					public void onFailure(int code, String msg) {
+						loading.setVisibility(View.GONE);
 						ViewUtil.getInstance().showToast("您的评论发送失败！",code);
 					}
 				});
